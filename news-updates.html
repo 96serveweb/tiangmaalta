@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Tiangmaatla - Official Information Board</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            padding-top: 70px;
+        }
+
+        .header-bar {
+            height: 5px;
+            background: linear-gradient(90deg, #007749 25%, #FFB612 25%, #FFB612 50%, #E03C31 50%, #E03C31 75%, #00194A 75%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1031;
+        }
+
+        .navbar {
+            background: #00194A;
+            padding: 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 0.9rem;
+            padding: 8px 16px !important;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        .page-header {
+            background: #00194A;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .news-card {
+            background: white;
+            margin-bottom: 24px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .news-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #e9ecef;
+        }
+
+        .news-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .badge-water { background: #e0f7fa; color: #006064; }
+        .badge-event { background: #fff3e0; color: #e65100; }
+        .badge-project { background: #e8f5e9; color: #1b5e20; }
+        .badge-story { background: #e3f2fd; color: #0d47a1; }
+        .badge-alert { background: #ffebee; color: #b71c1c; }
+
+        .news-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            color: #00194A;
+        }
+
+        .news-meta {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .news-excerpt {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .full-content {
+            display: none;
+            padding-top: 16px;
+            margin-top: 16px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .full-content.show {
+            display: block;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: #007749;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .read-more-btn:hover {
+            text-decoration: underline;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #007749;
+            display: inline-block;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #007749;
+        }
+
+        .category-link {
+            display: block;
+            padding: 6px 0;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .category-link:hover {
+            color: #007749;
+        }
+
+        .recent-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .recent-item:hover .recent-title {
+            color: #007749;
+        }
+
+        .recent-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #1e2a3e;
+        }
+
+        .recent-date {
+            font-size: 0.7rem;
+            color: #aaa;
+        }
+
+        .info-note {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-align: center;
+        }
+
+        .footer {
+            background: #00194A;
+            color: rgba(255,255,255,0.7);
+            padding: 40px 0 20px;
+            margin-top: 40px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding-top: 60px; }
+            .page-header { padding: 30px 0; }
+            .page-header h1 { font-size: 1.6rem; }
+            .news-img { height: 160px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar"></div>
+    
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Tiangmaatla.co.za</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="background: rgba(255,255,255,0.2); border: none; padding: 6px 12px;">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="community-guides.html">guides</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="directory.html">directory</a></li>
+                    <li class="nav-item"><a class="nav-link" href="social-worker.html">Social development</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>News & Updates</h1>
+            <p>Official announcements — read information published by Tiangmaatla Centre</p>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row g-4">
+            <div class="col-lg-8" id="newsFeed"></div>
+            <div class="col-lg-4">
+                <div class="sidebar-card">
+                    <h4 class="sidebar-title">Search</h4>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search news...">
+                </div>
+                
+                <div class="sidebar-card">
+                    <h4 class="sidebar-title">Categories</h4>
+                    <div id="categoryList"></div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h4 class="sidebar-title">Recent Updates</h4>
+                    <div id="recentNews"></div>
+                </div>
+                
+                <div class="info-note">
+                    <i class="fas fa-info-circle me-1"></i> All information on this page is published by Tiangmaatla Centre. For questions about any announcement, please use the contact details provided inside the news article.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h6 style="color: white; margin-bottom: 12px;">Tiangmaatla Centre</h6>
+                    <p>Community information platform — Sebayeng.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 style="color: white; margin-bottom: 12px;">Quick Links</h6>
+                    <ul class="list-unstyled" style="margin-bottom: 0;">
+                        <li><a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none;">Home</a></li>
+                        <li><a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none;">News & Updates</a></li>
+                        <li><a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none;">Directory</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 style="color: white; margin-bottom: 12px;">Note</h6>
+                    <p style="font-size: 0.8rem;">This website shares official announcements only. Always verify services directly with Tiangmaatla Centre.</p>
+                </div>
+            </div>
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center" style="font-size: 0.75rem;">
+                <p>&copy; 2026 Tiangmaatla Multipurpose Centre. All information is for announcement purposes only.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        const newsArticles = [
+            {
+                id: 1,
+                title: "Applications Status",
+                excerpt: "Current application period status for Tiangmaatla programmes.",
+                content: `<p>All applications are currently closed. No submissions are being accepted at this time. Future opportunities will be announced on this website when available.</p>`,
+                image: "/images/tmc_2.jpg",
+                category: "Announcements",
+                date: "2026-05-14",
+                badge: "badge-alert",
+                badgeText: "CLOSED"
+            },
+            {
+                id: 2,
+                title: "South Africa Unemployment Rate Rises to 32.7% in 2026",
+                excerpt: "Latest labour force data shows unemployment increased in the first quarter of 2026, with more than 8 million South Africans currently unemployed.",
+                content: `
+                    <p>Statistics South Africa released the latest Quarterly Labour Force Survey showing that the official unemployment rate increased from 31.4% in Q4 2025 to 32.7% in Q1 2026.</p>
+
+                    <p>The number of unemployed people increased to approximately <strong>8.1 million</strong>, while employment declined by about <strong>345,000 jobs</strong> during the quarter.</p>
+
+                    <p>Youth unemployment remains one of the country's biggest challenges, with many young South Africans still struggling to access employment opportunities, skills development, and work experience.</p>
+
+                    <p>Government and private sector stakeholders continue to focus on job creation, entrepreneurship support, infrastructure investment, and skills programmes to address the unemployment crisis.</p>
+
+                    <p><strong>Source:</strong> Statistics South Africa Quarterly Labour Force Survey (Q1 2026).</p>
+                `,
+                image: "/images/unemployment.jpg",
+                category: "Economy",
+                date: "2026-05-12",
+                badge: "badge-story",
+                badgeText: "ECONOMY"
+            }
+        ];
+
+        let currentSearch = '';
+        let currentCategory = '';
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-ZA', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        window.toggleContent = function(id) {
+            const fullEl = document.getElementById(`full-${id}`);
+            const btnEl = document.getElementById(`btn-${id}`);
+            if (fullEl.classList.contains('show')) {
+                fullEl.classList.remove('show');
+                btnEl.innerHTML = 'Read more →';
+            } else {
+                fullEl.classList.add('show');
+                btnEl.innerHTML = 'Show less ↑';
+            }
+        };
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function renderNews() {
+            let filtered = [...newsArticles];
+            if (currentSearch.trim() !== '') {
+                const searchLower = currentSearch.toLowerCase();
+                filtered = filtered.filter(a => 
+                    a.title.toLowerCase().includes(searchLower) || 
+                    a.excerpt.toLowerCase().includes(searchLower)
+                );
+            }
+            if (currentCategory && currentCategory !== 'All') {
+                filtered = filtered.filter(a => a.category === currentCategory);
+            }
+            
+            const container = document.getElementById('newsFeed');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="alert alert-light text-center">No news found. Try another search or category.</div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(article => `
+                <div class="news-card">
+                    <img src="${article.image}" class="news-img" alt="${article.title}" onerror="this.style.display='none'">
+                    <div style="padding: 20px;">
+                        <span class="news-badge ${article.badge}">${article.badgeText}</span>
+                        <h2 class="news-title">${escapeHtml(article.title)}</h2>
+                        <div class="news-meta"><i class="far fa-calendar-alt me-1"></i> ${formatDate(article.date)} · ${article.category}</div>
+                        <p class="news-excerpt">${escapeHtml(article.excerpt)}</p>
+                        <div id="full-${article.id}" class="full-content">${article.content}</div>
+                        <button id="btn-${article.id}" class="read-more-btn" onclick="toggleContent(${article.id})">Read more →</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCategories() {
+            const catsSet = new Set(newsArticles.map(a => a.category));
+            const categories = ['All', ...Array.from(catsSet).sort()];
+            const container = document.getElementById('categoryList');
+            container.innerHTML = categories.map(cat => `<a class="category-link" onclick="filterByCategory('${cat.replace(/'/g, "\\'")}')">${cat}</a>`).join('');
+        }
+
+        function renderRecent() {
+            const recent = [...newsArticles].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 4);
+            const container = document.getElementById('recentNews');
+            container.innerHTML = recent.map(article => `
+                <div class="recent-item" onclick="searchByTitle('${escapeHtml(article.title).replace(/'/g, "\\'")}')">
+                    <div class="recent-title">${escapeHtml(article.title.length > 60 ? article.title.substring(0, 60) + '…' : article.title)}</div>
+                    <div class="recent-date">${formatDate(article.date)}</div>
+                </div>
+            `).join('');
+        }
+
+        window.filterByCategory = function(cat) {
+            currentCategory = cat === 'All' ? '' : cat;
+            currentSearch = '';
+            document.getElementById('searchInput').value = '';
+            renderNews();
+        };
+
+        window.searchByTitle = function(title) {
+            currentSearch = title;
+            currentCategory = '';
+            document.getElementById('searchInput').value = title;
+            renderNews();
+        };
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            currentSearch = e.target.value;
+            currentCategory = '';
+            renderNews();
+        });
+
+        renderCategories();
+        renderRecent();
+        renderNews();
+    </script>
+</body>
+</html>

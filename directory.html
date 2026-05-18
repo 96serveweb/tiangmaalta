@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiangmaatla - Community Directory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            padding-top: 70px;
+        }
+
+        .header-bar {
+            height: 5px;
+            background: linear-gradient(90deg, #007749 25%, #FFB612 25%, #FFB612 50%, #E03C31 50%, #E03C31 75%, #00194A 75%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1031;
+        }
+
+        .navbar {
+            background: #00194A;
+            padding: 12px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 0.9rem;
+            padding: 8px 16px !important;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        .page-header {
+            background: #00194A;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 12px;
+            padding: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: #007749;
+            color: white;
+            border-color: #007749;
+        }
+
+        .filter-btn.active {
+            background: #007749;
+            color: white;
+            border-color: #007749;
+        }
+
+        .directory-card {
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+
+        .directory-card:hover {
+            transform: translateX(4px);
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+        }
+
+        .card-icon i {
+            font-size: 20px;
+            color: #007749;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-category {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .card-detail {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .card-detail i {
+            width: 22px;
+            color: #aaa;
+        }
+
+        .card-detail a {
+            color: #007749;
+            text-decoration: none;
+        }
+
+        .card-detail a:hover {
+            text-decoration: underline;
+        }
+
+        .emergency-note {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin-top: 24px;
+        }
+
+        .whatsapp-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-icon i {
+            color: white;
+            font-size: 26px;
+        }
+
+        .footer {
+            background: #00194A;
+            color: rgba(255,255,255,0.7);
+            padding: 40px 0 20px;
+            margin-top: 40px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding-top: 60px; }
+            .page-header { padding: 30px 0; }
+            .page-header h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar"></div>
+    
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Tiangmaatla.co.za</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="background: rgba(255,255,255,0.2); border: none; padding: 6px 12px;">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="community-guides.html">guides</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news-updates.html">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">directory</a></li>
+                    <li class="nav-item"><a class="nav-link" href="social-worker.html">Social development</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <a href="https://wa.me/27739538642" class="whatsapp-icon" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Community Directory</h1>
+            <p>Essential services and emergency contacts for Sebayeng residents</p>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for a service or contact...">
+        </div>
+        
+        <div class="category-filter" id="categoryFilter"></div>
+        
+        <div id="directoryListings"></div>
+        
+        <div class="emergency-note">
+            <i class="fas fa-info-circle me-2" style="color: #ff9800;"></i>
+            <strong>Important:</strong> If the local police station is unreachable, always call <strong>10111</strong> or <strong>112</strong> for immediate emergency assistance.
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h6 style="color: white; margin-bottom: 12px;">Tiangmaatla Centre</h6>
+                    <p>Building a stronger Sebayeng through community-driven development.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 style="color: white; margin-bottom: 12px;">Quick Links</h6>
+                    <ul class="list-unstyled" style="margin-bottom: 0;">
+                        <li><a href="directory.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Community Directory</a></li>
+                        <li><a href="community-guides.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">Safety & Health Guides</a></li>
+                        <li><a href="news-updates.html" style="color: rgba(255,255,255,0.7); text-decoration: none;">News Updates</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 style="color: white; margin-bottom: 12px;">Emergency Numbers</h6>
+                    <ul class="list-unstyled" style="margin-bottom: 0;">
+                        <li>Police: <strong>10111</strong></li>
+                        <li>Ambulance: <strong>10177</strong></li>
+                        <li>National Emergency: <strong>112</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center" style="font-size: 0.75rem;">
+                <p>&copy; 2026 Tiangmaatla Multipurpose Centre. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const directoryData = [
+            // Police / Emergency - Sebayeng specific
+            { 
+                name: "SAPS Sebayeng", 
+                category: "emergency", 
+                phone: "015-2672922", 
+                email: "lim.sebayeng.uni@saps.gov.za",
+                address: "Stand no 506 Zone A, Solomondale, Sebayeng, 0752", 
+                hours: "24/7",
+                note: "Local police station"
+            },
+            { 
+                name: "Police Emergency (National)", 
+                category: "emergency", 
+                phone: "10111", 
+                address: "Toll-free from any phone", 
+                hours: "24/7",
+                note: "Use if local station unreachable"
+            },
+            { 
+                name: "National Emergency (Cell)", 
+                category: "emergency", 
+                phone: "112", 
+                address: "From any cell phone", 
+                hours: "24/7",
+                note: "Connects to emergency services"
+            },
+            { 
+                name: "Ambulance Services", 
+                category: "emergency", 
+                phone: "10177", 
+                address: "Toll-free", 
+                hours: "24/7",
+                note: "Medical emergencies"
+            },
+            // Health
+            { 
+                name: "Sebayeng Clinic", 
+                category: "health", 
+                phone: "015-2672909", 
+                address: "Sebayeng", 
+                hours: "Mon-Fri 7:30AM-4PM, Sat 8AM-12PM",
+                note: "General checkups, HIV testing, immunizations"
+            },
+            { 
+                name: "Mankweng Hospital", 
+                category: "health", 
+                phone: "(015) 286 1000", 
+                address: "Mankweng", 
+                hours: "24/7 Emergency",
+                note: "Referral hospital"
+            },
+            // Support Helplines
+            { 
+                name: "GBV Command Centre", 
+                category: "support", 
+                phone: "0800 428 428", 
+                address: "Toll-free", 
+                hours: "24/7",
+                note: "Gender-Based Violence support"
+            },
+            { 
+                name: "Childline South Africa", 
+                category: "support", 
+                phone: "08000 55 555", 
+                address: "Toll-free", 
+                hours: "24/7",
+                note: "Child abuse and neglect reporting"
+            },
+            { 
+                name: "Lifeline South Africa", 
+                category: "support", 
+                phone: "0861 322 322", 
+                address: "National", 
+                hours: "24/7",
+                note: "Counselling and crisis support"
+            },
+            { 
+                name: "Suicide Crisis Helpline", 
+                category: "support", 
+                phone: "0800 567 567", 
+                address: "Toll-free", 
+                hours: "24/7",
+                note: "Mental health crisis support"
+            },
+            { 
+                name: "Tears Foundation", 
+                category: "support", 
+                phone: "1347355#", 
+                address: "From any cell phone", 
+                hours: "24/7",
+                note: "Rape and abuse support"
+            },
+            // Government
+            { 
+                name: "Sebayeng Municipality", 
+                category: "government", 
+                phone: "(015) 590 2000", 
+                address: "Municipal Offices", 
+                hours: "Mon-Fri 8AM-4PM",
+                note: "Water, waste, roads, electricity"
+            },
+            { 
+                name: "SASSA Sebayeng", 
+                category: "government", 
+                phone: "0800 601 011", 
+                address: "Government Complex", 
+                hours: "Mon-Fri 8AM-3:30PM",
+                note: "Social grants, SRD applications"
+            },
+            { 
+                name: "Dept of Social Development", 
+                category: "government", 
+                phone: "(015) 590 2376", 
+                address: "Tiangmaatla Centre", 
+                hours: "Mon-Fri 8AM-4PM",
+                note: "Social work, child protection"
+            },
+            // Education
+            { 
+                name: "Mafolofolo Hih School", 
+                category: "education", 
+                phone: " (015) 267 5750", 
+                address: "Stand 1248, Sebayeng Town, Limpopo", 
+                hours: "School hours",
+                note: "Grade 8 - Grade 12"
+            },
+            { 
+                name: "Baphutheng Secondary School", 
+                category: "education", 
+                phone: "083 331 7310", 
+                address: "1231 Sebayeng Township, Solomondale, Sovenga, Limpopo, 0727", 
+                hours: "School hours",
+                note: "Grade 8 - Grade 12"
+            },
+            { 
+                name: "Leruleng Secondary School", 
+                category: "education", 
+                phone: "083 487 7274", 
+                address: "Sebayeng Village, Dikgale, Sovenga, Limpopo", 
+                hours: "School hours",
+                note: "Grade 8 - Grade 12"
+            },
+            { 
+                name: "Maphuto Primary School", 
+                category: "education", 
+                phone: "(015) 267 3424", 
+                address: "Sebayeng Township, Solomondale (near Polokwane), Limpopo", 
+                hours: "School hours",
+                note: "Grade R - Grade 7"
+            },
+            { 
+                name: "Solomondale Primary School", 
+                category: "education", 
+                phone: "(015) 267 4703", 
+                address: "Private Bag X1107, Sovenga, 0727", 
+                hours: "School hours",
+                note: "Grade R - Grade 7"
+            },
+            { 
+                name: "Sebayeng Primary School", 
+                category: "education", 
+                phone: "(015) 267 7148", 
+                address: "Next to Municipal Offices", 
+                hours: "School hours",
+                note: "Grade R - Grade 7"
+            }
+        ];
+
+        let currentCategory = "all";
+        let currentSearch = "";
+
+        function getIcon(category) {
+            const icons = { 
+                health: "fa-hospital-user", 
+                emergency: "fa-phone-alt", 
+                government: "fa-landmark", 
+                education: "fa-graduation-cap",
+                support: "fa-heart"
+            };
+            return icons[category] || "fa-building";
+        }
+
+        function getCategoryLabel(category) {
+            const labels = { 
+                health: "Health", 
+                emergency: "Emergency", 
+                government: "Government", 
+                education: "Education",
+                support: "Support Helpline"
+            };
+            return labels[category] || category;
+        }
+
+        function getCategoryColor(category) {
+            const colors = { 
+                health: "#e74c3c", 
+                emergency: "#c0392b", 
+                government: "#2980b9", 
+                education: "#27ae60",
+                support: "#8e44ad"
+            };
+            return colors[category] || "#007749";
+        }
+
+        function renderFilters() {
+            const cats = ["all", "emergency", "health", "support", "government", "education"];
+            const container = document.getElementById("categoryFilter");
+            const labels = { 
+                all: "All Services", 
+                emergency: "Emergency", 
+                health: "Health", 
+                support: "Support Helplines",
+                government: "Government", 
+                education: "Education" 
+            };
+            
+            container.innerHTML = cats.map(cat => `
+                <button class="filter-btn ${cat === currentCategory ? 'active' : ''}" data-cat="${cat}">
+                    ${labels[cat]}
+                </button>
+            `).join("");
+            
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    currentCategory = btn.getAttribute("data-cat");
+                    renderFilters();
+                    renderDirectory();
+                });
+            });
+        }
+
+        function renderDirectory() {
+            let filtered = directoryData;
+            if (currentCategory !== "all") {
+                filtered = filtered.filter(i => i.category === currentCategory);
+            }
+            if (currentSearch) {
+                filtered = filtered.filter(i => 
+                    i.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    (i.note && i.note.toLowerCase().includes(currentSearch.toLowerCase()))
+                );
+            }
+            
+            const container = document.getElementById("directoryListings");
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="alert alert-light text-center">No services found.</div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(item => `
+                <div class="directory-card">
+                    <div class="d-flex">
+                        <div style="flex: 1;">
+                            <div class="card-title">${item.name}</div>
+                            <span class="card-category" style="background: ${getCategoryColor(item.category)}20; color: ${getCategoryColor(item.category)};">${getCategoryLabel(item.category)}</span>
+                            <div class="card-detail"><i class="fas fa-phone"></i> <a href="tel:${item.phone.replace(/[^0-9+]/g, '')}">${item.phone}</a></div>
+                            ${item.email ? `<div class="card-detail"><i class="fas fa-envelope"></i> <a href="mailto:${item.email}">${item.email}</a></div>` : ''}
+                            <div class="card-detail"><i class="fas fa-map-marker-alt"></i> ${item.address}</div>
+                            <div class="card-detail"><i class="far fa-clock"></i> ${item.hours}</div>
+                            ${item.note ? `<div class="card-detail"><i class="fas fa-info-circle"></i> ${item.note}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        document.getElementById("searchInput").addEventListener("input", function(e) {
+            currentSearch = e.target.value;
+            renderDirectory();
+        });
+
+        renderFilters();
+        renderDirectory();
+    </script>
+</body>
+</html>

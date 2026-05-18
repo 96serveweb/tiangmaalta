@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiangmaatla Multipurpose Centre</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sa-green: #007749;
+            --sa-blue: #00194A;
+            --sa-yellow: #FFB612;
+            --sa-red: #E03C31;
+            --sa-black: #000000;
+            --sa-white: #FFFFFF;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding-top: 76px; 
+        }
+
+        html {
+    font-size: 15px;
+}
+
+        
+        .sa-bg-dark {
+            background: linear-gradient(135deg, var(--sa-blue) 0%, var(--sa-black) 100%);
+        }
+        
+        .sa-bg-gradient {
+            background: linear-gradient(135deg, var(--sa-green) 0%, var(--sa-blue) 100%);
+        }
+        
+        .header-bar {
+            height: 8px;
+            background: linear-gradient(90deg, var(--sa-green) 25%, var(--sa-yellow) 25%, var(--sa-yellow) 50%, var(--sa-red) 50%, var(--sa-red) 75%, var(--sa-blue) 75%);
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+        }
+        
+        .hero-section {
+            padding: 80px 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23007749" opacity="0.1"/><path d="M0,0 L200,200 M200,0 L0,200" stroke="%23007749" stroke-width="2" opacity="0.1"/></svg>'), 
+            linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+            url('/images/hero-img.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="%23FFB612" stroke-width="2" fill="none" opacity="0.2"/></svg>');
+            background-size: 200px;
+            animation: pulse 20s infinite linear;
+        }
+        
+        @keyframes pulse {
+            0% { background-position: 0 0; }
+            100% { background-position: 200px 200px; }
+        }
+        
+        .feature-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.8rem;
+            padding: 5px 15px;
+            border-radius: 30px;
+        }
+        
+        .animated-img {
+            border-radius: 10px;
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(5deg);
+            transition: transform 0.5s;
+        }
+        
+        
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+        
+        .progress-bar {
+            background-color: var(--sa-green);
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+            margin: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 15px;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--sa-green);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -3rem;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--sa-yellow);
+            border: 3px solid var(--sa-green);
+        }
+        
+        .flag-colors {
+            display: flex;
+            height: 8px;
+            margin: 20px 0;
+        }
+        
+        .flag-colors div {
+            height: 100%;
+            flex-grow: 1;
+        }
+        
+        .color-1 { background-color: var(--sa-black); }
+        .color-2 { background-color: var(--sa-yellow); }
+        .color-3 { background-color: var(--sa-white); }
+        .color-4 { background-color: var(--sa-green); }
+        .color-5 { background-color: var(--sa-red); }
+        .color-6 { background-color: var(--sa-blue); }
+        
+        .footer {
+            background: var(--sa-blue);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .btn-sa {
+            background: var(--sa-green);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-sa:hover {
+            background: var(--sa-blue);
+            color: white;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            background: rgba(0, 119, 73, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover .icon-box {
+            background: var(--sa-green);
+        }
+        
+        .feature-card:hover .icon-box i {
+            color: white;
+        }
+        
+        .icon-box i {
+            font-size: 1.6rem;
+            color: var(--sa-green);
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-icon {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s;
+            text-decoration: none !important;
+        }
+        
+        .whatsapp-icon i {
+            color: white;
+            font-size: 32px;
+        }
+        
+        .manager-container {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+        }
+        
+        .manager-picture {
+            position: relative;
+            width: 250px;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 3px solid var(--sa-yellow);
+        }
+        
+        .manager-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .manager-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0));
+            color: white;
+            padding: 20px 15px 15px;
+            text-align: center;
+        }
+        
+        .manager-overlay h4 {
+            margin: 0;
+            font-size: 0.8rem;
+            font-weight: lighter;
+            text-align: right;
+            font-style: italic;
+        }
+        
+        .manager-overlay p {
+            margin: 5px 0 0;
+            font-size: 0.7rem;
+            opacity: 0.9;
+            text-align: right;
+            display: none;
+        }
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        text-align: center;
+    }
+
+    .navbar-nav {
+        align-items: center;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 12px 0;
+    }
+}
+
+        
+        
+        @media (min-width: 992px) {
+            .manager-container {
+                position: absolute;
+                right: -30px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            
+            .manager-info {
+                text-align: center;
+                margin-top: 15px;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            .manager-container {
+                display: none;
+            }
+        }
+        
+        .section-spacing {
+            padding: 60px 0;
+        }
+        
+        .jobs-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+        }
+        
+        .job-status {
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .status-open {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-closed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .project-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        
+        .project-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .project-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .project-card:hover .project-img img {
+            transform: scale(1.05);
+        }
+        
+        .project-date {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .jobs-hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+            url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0 80px;
+        }
+        
+        .job-card {
+            border-left: 4px solid var(--sa-green);
+            transition: all 0.3s;
+        }
+        
+        .job-card:hover {
+            transform: translateX(5px);
+        }
+
+    .meetings-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .meeting-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+    }
+
+    .meeting-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .meeting-status {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 0.75rem;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: 600;
+        z-index: 1;
+    }
+
+    .status-upcoming {
+        background-color: var(--sa-green);
+        color: white;
+    }
+
+    .status-ongoing {
+        background-color: var(--sa-yellow);
+        color: var(--sa-black);
+    }
+
+    .status-completed {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .countdown-container {
+        background: var(--sa-blue);
+        color: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .countdown-display {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .countdown-unit {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 15px 10px;
+        min-width: 80px;
+    }
+
+    .countdown-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .countdown-label {
+        font-size: 0.8rem;
+        opacity: 0.9;
+        margin-top: 5px;
+    }
+
+    .meeting-details {
+        padding: 20px;
+    }
+
+    .meeting-agenda {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .meeting-agenda li {
+        padding: 5px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+
+    .meeting-agenda li:before {
+        content: "•";
+        color: var(--sa-green);
+        font-size: 1.5rem;
+        position: absolute;
+        left: 0;
+        top: -2px;
+    }
+
+    .attendees-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .attendee-badge {
+        background: #f1f1f1;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+    }
+
+    .meeting-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .meeting-history {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .meeting-history-item {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        transition: background 0.3s;
+    }
+
+    .meeting-history-item:hover {
+        background: #f8f9fa;
+    }
+
+    .no-meeting-card {
+        background: white;
+        border-radius: 15px;
+        padding: 60px 30px;
+        text-align: center;
+        border: 2px dashed #dee2e6;
+    }
+
+    .no-meeting-icon {
+        font-size: 4rem;
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+
+    .meeting-info-panel {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .info-item {
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--sa-blue);
+        min-width: 120px;
+        display: inline-block;
+    }
+
+    .meetings-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .meeting-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s;
+        height: 100%;
+    }
+
+    .meeting-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .meeting-status {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 0.75rem;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .status-upcoming {
+        background-color: #007749;
+        color: white;
+    }
+
+    .status-ongoing {
+        background-color: #FFB612;
+        color: black;
+    }
+
+    .status-completed {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .countdown-container {
+        background: #00194A;
+        color: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .countdown-display {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .countdown-unit {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 15px 10px;
+        min-width: 80px;
+    }
+
+    .countdown-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .countdown-label {
+        font-size: 0.8rem;
+        opacity: 0.9;
+    }
+
+    .meeting-history-item {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .meeting-history-item:hover {
+        background: #f8f9fa;
+    }
+        </style>
+
+        <style>
+
+    .btn-loading {
+        position: relative;
+        padding-right: 2.5rem;
+    }
+
+    input[type="date"]:disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 2rem !important;
+        }
+    }
+            
+    @media (max-width: 768px) {
+    .countdown-container {
+        padding: 15px 10px;
+        margin: 15px 0;
+    }
+    
+    .countdown-display {
+        gap: 8px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 5px;
+        justify-content: space-between;
+    }
+    
+    .countdown-unit {
+        min-width: 60px;
+        padding: 10px 5px;
+        flex: 1;
+    }
+    
+    .countdown-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    
+    .countdown-label {
+        font-size: 0.7rem;
+    }
+    
+    .meeting-info-panel {
+        padding: 15px;
+    }
+    
+    .meeting-details {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .countdown-container {
+        padding: 12px 8px;
+    }
+    
+    .countdown-display {
+        gap: 5px;
+    }
+    
+    .countdown-unit {
+        min-width: 50px;
+        padding: 8px 4px;
+    }
+    
+    .countdown-value {
+        font-size: 1.5rem;
+    }
+    
+    .countdown-label {
+        font-size: 0.65rem;
+    }
+    
+    .info-label {
+        min-width: 100px;
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .meeting-agenda li {
+        padding-left: 20px;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 400px) {
+    .countdown-unit {
+        min-width: 45px;
+        padding: 6px 3px;
+    }
+    
+    .countdown-value {
+        font-size: 1.3rem;
+    }
+    
+    .countdown-label {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .meeting-details .row > .col-md-6:first-child::after {
+        content: "";
+        display: block;
+        height: 1px;
+        background: #e0e0e0;
+        margin: 25px 0;
+    }
+    
+    .meeting-details .col-md-6:last-child h5:first-child {
+        padding-top: 20px;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="header-bar"></div>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark sa-bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="/images/LOGO PNG.png" alt="SA Logo" width="40" height="40" class="d-inline-block align-top me-2">
+                Tiangmaatla.co.za
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="jobs.html">Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="community-guides.html">guides</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news-updates.html">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="directory.html">directory</a></li>
+                    <li class="nav-item"><a class="nav-link" href="social-worker.html">Social development</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <a href="https://wa.me/27739538642" class="whatsapp-icon" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <section id="home" class="hero-section text-center">
+        <div class="container position-relative">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4">Tiangmaatla Multipurpose Centre</h1>
+                    <p class="lead mb-5">Sebayeng, Limpopo Province</p>
+                    <a href="#project-details" class="btn btn-sa btn-lg">Explore Project <i class="ms-2 fas fa-arrow-down"></i></a>
+                </div>
+            </div>
+            
+            <div class="manager-container d-none d-lg-block">
+                <div class="manager-picture">
+                    <img src="/images/tms-hero-img@0.75x.jpg" alt="Manager Picture">
+                    <div class="manager-overlay">
+                        <h4>Manager: Matsi M</h4>
+                        <p>Leading community development initiatives in Sebayeng</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="flag-colors">
+        <div class="color-1"></div>
+        <div class="color-2"></div>
+        <div class="color-3"></div>
+        <div class="color-4"></div>
+        <div class="color-5"></div>
+        <div class="color-6"></div>
+    </div>
+
+    <section id="project-details" class="py-5">
+        <div class="container py-5">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="fw-bold mb-4">About the Centre</h2>
+                    <p class="lead">We are a community based organization aimed at improving the health and alleviating poverty of the youth in our community.</p>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="feature-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h4 class="card-title">Community Services</h4>
+                            <p class="card-text">Community development programs and local initiative support for Sebayeng residents.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <h4 class="card-title">Economic Development</h4>
+                            <p class="card-text">Supporting local economic initiatives and community-based projects.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4 class="card-title">Community Hall</h4>
+                            <p class="card-text">A large multipurpose space for meetings, events, weddings, and community gatherings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+    <div class="col-lg-6">
+        <img src="/images/environment.jpg" alt="Community Center" class="img-fluid animated-img">
+    </div>
+    <div class="col-lg-6">
+        <h3 class="fw-bold mb-4">Employment Progress</h3>
+        <div class="mb-4">
+            <span class="badge bg-warning status-badge">In Development</span>
+            <h6>Employment Programs</h6>
+            <div class="progress mb-3">
+                <div class="progress-bar" style="width: 85%"></div>
+            </div>
+            <p>The employment initiative is largely complete but awaiting operationalization.</p>
+        </div>
+        <div class="mb-4">
+            <h6>Skills Training Approval</h6>
+            <div class="progress mb-3">
+                <div class="progress-bar" style="width: 40%"></div>
+            </div>
+            <p>Skills development programs in planning phase.</p>
+        </div>
+        <a href="jobs.html" class="btn btn-sa">View Project Updates</a>
+    </div>
+</div>
+        </div>
+    </section>
+
+    <section id="services" class="section-spacing " style="background-color: #00194A;">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-4" style="color: #fcfcfc;">Our Services</h2>
+                <p class="lead" style="color: #fcfcfc;">Community-focused services to support development in Sebayeng</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="feature-card card h-100">
+                    <div class="card-body p-4">
+                        <h4 class="card-title">Community Development</h4>
+                        <p class="card-text">Supporting local initiatives and community-led projects for Sebayeng residents.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-card card h-100">
+                    <div class="card-body p-4">
+                        <h4 class="card-title">Economic Initiatives</h4>
+                        <p class="card-text">Supporting local economic projects and community enterprise development.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-card card h-100">
+                    <div class="card-body p-4">
+                        <h4 class="card-title">Skills Development</h4>
+                        <p class="card-text">Training programs in various fields including computer literacy, crafts, agriculture, and construction.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-card card h-100">
+                    <div class="card-body p-4">
+                        <h4 class="card-title">Community Events</h4>
+                        <p class="card-text">Regular community gatherings, workshops, and cultural events to foster unity and shared identity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="projects" class="section-spacing">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-4">Our Projects & Achievements</h2>
+                <p class="lead">Celebrating successful community initiatives led by Tiangmaatla</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card card h-100">
+                    <img src="/images/006.jpg" class="card-img-top" alt="Tiangmaatla team celebrating community garden success">
+                    <div class="card-body">
+                        <h4 class="card-title">Community Garden Success</h4>
+                        <p class="card-text">Tiangmaatla management celebrating the harvest from our sustainable community food project that now feeds 50+ families.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card card h-100">
+                    <img src="/images/008.jpg" class="card-img-top" alt="Tiangmaatla youth program celebration">
+                    <div class="card-body">
+                        <h4 class="card-title">Youth Program Launch</h4>
+                        <p class="card-text">Tiangmaatla team commemorating the successful launch of youth development programs serving 200+ young people.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card card h-100">
+                    <img src="/images/005.jpg" class="card-img-top" alt="Tiangmaatla digital literacy achievement">
+                    <div class="card-body">
+                        <h4 class="card-title">Digital Literacy Milestone</h4>
+                        <p class="card-text">Tiangmaatla leadership celebrating 500+ community members trained in computer skills and digital literacy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-spacing bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-4">Project Activities</h2>
+                <p class="lead">Tiangmaatla in Action: Community Development at Work</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/community-donations.jpg" alt="Multiple donations distribution">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Active</span>
+                        <h5 class="card-title">Community Donations</h5>
+                        <p class="card-text">Distributing essential supplies and support to families in need.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> Ongoing
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/management-working.jpg" alt="Tiangmaatla management working">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Active</span>
+                        <h5 class="card-title">Management Operations</h5>
+                        <p class="card-text">Tiangmaatla leadership coordinating community development programs.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> Ongoing
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/agriculture-results.jpg" alt="Agriculture food harvest results">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-success mb-2">Active</span>
+                        <h5 class="card-title">Agriculture Results</h5>
+                        <p class="card-text">Successful harvests from community farming projects providing local food.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> Ongoing
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/preschool-graduation.jpg" alt="Preschool kids graduation">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-success mb-2">Completed</span>
+                        <h5 class="card-title">Early Childhood Development</h5>
+                        <p class="card-text">Celebrating preschool milestones and early education achievements.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> Annual
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/kids-homework-help.jpg" alt="Assisting kids with school work">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Active</span>
+                        <h5 class="card-title">After School Support</h5>
+                        <p class="card-text">Volunteers helping children with homework and educational activities.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> Weekdays
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/epwp-meeting.jpg" alt="EPWP program meeting">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Active</span>
+                        <h5 class="card-title">EPWP Programs</h5>
+                        <p class="card-text">Expanded Public Works Programme creating local employment opportunities.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> Ongoing
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/facility-rental.jpg" alt="Toilets and tents for hire">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-success mb-2">Available</span>
+                        <h5 class="card-title">Facility Rental</h5>
+                        <p class="card-text">Community toilets, tents, and facilities available for events and gatherings.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> Available
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/community-cleaning.jpg" alt="Community cleaning projects">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Active</span>
+                        <h5 class="card-title">Clean Community</h5>
+                        <p class="card-text">Regular cleaning projects and environmental maintenance initiatives.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> Monthly
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card card h-100">
+                    <div class="project-img">
+                        <img src="/images/kids-agriculture.jpg" alt="Kids agriculture training">
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Active</span>
+                        <h5 class="card-title">Youth Agriculture</h5>
+                        <p class="card-text">Children learning farming skills and sustainable agriculture practices.</p>
+                        <div class="project-date">
+                            <i class="far fa-calendar me-1"></i> School Terms
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <section class="section-spacing">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-4">GBV and Children Abuse</h2>
+                        <p class="lead">"Our top record about GBV and Children Abuse"</p>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <h4 class="card-title text-danger">Report Abuse</h4>
+                                    <p class="card-text">If you or someone you know is experiencing gender-based violence or child abuse, please reach out immediately.</p>
+                                    <div class="mt-3">
+                                        <p><i class="fas fa-phone me-2 text-danger"></i> <strong>Emergency Contact:</strong> (073) 953 8642</p>
+                                        <p><i class="fas fa-envelope me-2 text-danger"></i> <strong>Email:</strong> Tiangmaatlatmc@gmail.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <h4 class="card-title text-primary">Support Services</h4>
+                                    <p class="card-text">We provide counseling, legal assistance, and safe spaces for survivors of GBV and child abuse.</p>
+                                    <ul class="mt-3">
+                                        <li>Weekly support groups</li>
+                                        <li>Legal aid consultations</li>
+                                        <li>Trauma counseling</li>
+                                        <li>Safe house referrals</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="section-spacing bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="fw-bold mb-4">Community Blog</h2>
+                    <p class="lead">Stories, updates, and insights from our community</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="/images/successful-harvest.png" class="card-img-top" alt="Blog Image 1">
+                        <div class="card-body">
+                            <h5 class="card-title">Community Garden Harvest Festival</h5>
+                            <p class="card-text">Celebrating our first successful harvest from the community garden project with a festival for all residents.</p>
+                            <a href="#" class="btn btn-sa btn-sm">Completed</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="/images/Digital-Literacy.jpg" class="card-img-top" alt="Blog Image 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Digital Literacy Program Success</h5>
+                            <p class="card-text">Over 100 community members have completed our basic computer skills training program.</p>
+                            <a href="#" class="btn btn-sa btn-sm">Completed</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="/images/Entrepreneurship-Workshop.jpg" class="card-img-top" alt="Blog Image 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Youth Entrepreneurship Workshop</h5>
+                            <p class="card-text">Empowering young people with business skills and mentorship opportunities.</p>
+                            <a href="#" class="btn btn-sa btn-sm">Completed</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section id="meetings" class="section-spacing meetings-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-4">Tiangmaatla Centre Meetings</h2>
+                <p class="lead">Management, staff, project, and planning meetings schedule</p>
+            </div>
+        </div>
+        
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <div id="noMeetingScheduled" class="no-meeting-card" style="display: none;">
+                    <div class="no-meeting-icon">
+                        <i class="far fa-calendar-times"></i>
+                    </div>
+                    <h3>No Meetings Scheduled</h3>
+                    <p class="lead">There are currently no upcoming meetings at Tiangmaatla.</p>
+                    <p class="text-muted">Check back later for updates on management and operational meetings.</p>
+                </div>
+                
+                <div id="meetingScheduled" class="meeting-card card">
+                    <div class="card-body p-0">
+                        <div class="position-relative">
+                            <span class="meeting-status" id="currentMeetingStatus">UPCOMING</span>
+                            <div class="countdown-container">
+                                <h4 class="text-center mb-4" id="meetingTitle">Tiangmaatla Management Team Meeting</h4>
+                                <div class="countdown-display" id="countdownDisplay">
+                                    <div class="countdown-unit">
+                                        <div class="countdown-value" id="days">--</div>
+                                        <div class="countdown-label">DAYS</div>
+                                    </div>
+                                    <div class="countdown-unit">
+                                        <div class="countdown-value" id="hours">--</div>
+                                        <div class="countdown-label">HOURS</div>
+                                    </div>
+                                    <div class="countdown-unit">
+                                        <div class="countdown-value" id="minutes">--</div>
+                                        <div class="countdown-label">MINUTES</div>
+                                    </div>
+                                    <div class="countdown-unit">
+                                        <div class="countdown-value" id="seconds">--</div>
+                                        <div class="countdown-label">SECONDS</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="meeting-details">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h5>Meeting Information</h5>
+                                                <div class="meeting-info-panel mt-3">
+                                                    <div class="info-item">
+                                                        <span class="info-label">Date:</span>
+                                                        <span id="meetingDateText">Loading...</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">Time:</span>
+                                                        <span id="meetingTimeText">Loading...</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">Duration:</span>
+                                                        <span id="meetingDurationText">Loading...</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">Venue:</span>
+                                                        <span id="meetingVenueText">Loading...</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">Chairperson:</span>
+                                                        <span id="meetingChairText">Loading...</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">Status:</span>
+                                                        <span id="meetingStatusText">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5>Meeting Agenda</h5>
+                                                <div class="mt-3">
+                                                    <ul class="meeting-agenda" id="meetingAgenda">
+                                                        <li>Loading agenda items...</li>
+                                                    </ul>
+                                                </div>
+                                                
+                                                <h5 class="mt-4">Participants</h5>
+                                                <div class="attendees-list mt-3" id="meetingAttendees">
+                                                    <span class="attendee-badge">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="meeting-info-panel h-100">
+                                            <h5>Meeting Progress</h5>
+                                            
+                                            <div class="mt-4">
+                                                <h6>Countdown Status:</h6>
+                                                <div class="progress mb-2" style="height: 8px;">
+                                                    <div class="progress-bar bg-info" id="countdownProgress" style="width: 0%"></div>
+                                                </div>
+                                                <small class="text-muted" id="countdownStatusText">Meeting not started</small>
+                                            </div>
+                                            
+                                            <div class="mt-4">
+                                                <h6>Duration Progress:</h6>
+                                                <div class="progress mb-2" style="height: 8px;">
+                                                    <div class="progress-bar" id="durationProgress" style="width: 0%"></div>
+                                                </div>
+                                                <small class="text-muted" id="durationText">0% completed</small>
+                                            </div>
+                                            
+                                            <div class="mt-4">
+                                                <h6>Meeting duration:</h6>
+                                                <p class="mb-2" id="timeUntilText">--</p>
+                                            </div>
+                                            
+                                            <div class="meeting-actions mt-4">
+                                                <button class="btn btn-sa w-100" id="joinMeetingBtn" disabled>
+                                                    <i class="fas fa-door-open me-2"></i>Meeting Room (Active when ongoing)
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="mt-4">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Scheduled by Tiangmaatla Administration
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="meeting-history card">
+                    <div class="card-body">
+                        <h5 class="mb-4">Recent Tiangmaatla Meeting</h5>
+                        <div id="meetingsHistory">
+
+                            <div class="meeting-history-item">
+                                <div class="text-center py-4">
+                                    <p class="text-muted mb-0">No recent meetings found</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="appointment" class="section-spacing">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-4">Schedule an Appointment</h2>
+                <p class="lead">Book a meeting with Tiangmaatla Centre management</p>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Appointments must be scheduled at least 2 days in advance. No same-day appointments.
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-5">
+                        <form id="appointmentForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="appointmentName" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="appointmentName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="appointmentEmail" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="appointmentEmail" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="appointmentPhone" class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="appointmentPhone" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="appointmentType" class="form-label">Appointment Type *</label>
+                                    <select class="form-select" id="appointmentType" required>
+                                        <option value="" selected disabled>Select type of appointment</option>
+                                        <option value="Management Meeting">Management Meeting</option>
+                                        <option value="Project Discussion">Project Discussion</option>
+                                        <option value="Community Service">Community Service</option>
+                                        <option value="Business Proposal">Business Proposal</option>
+                                        <option value="General Inquiry">General Inquiry</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="appointmentDate" class="form-label">Preferred Date *</label>
+                                    <input type="date" class="form-control" id="appointmentDate" required min="">
+                                    <small class="text-muted">Minimum 2 days from today</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="appointmentTime" class="form-label">Preferred Time *</label>
+                                    <select class="form-select" id="appointmentTime" required>
+                                        <option value="" selected disabled>Select time slot</option>
+                                        <option value="08:00">08:00 AM</option>
+                                        <option value="09:00">09:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">01:00 PM</option>
+                                        <option value="14:00">02:00 PM</option>
+                                        <option value="15:00">03:00 PM</option>
+                                    </select>
+                                    <small class="text-muted">Office hours: Mon-Thur 8AM-4PM, Fri 8AM-1PM</small>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="appointmentSubject" class="form-label">Appointment Subject *</label>
+                                <input type="text" class="form-control" id="appointmentSubject" 
+                                       placeholder="What is this appointment about?" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="appointmentReason" class="form-label">Reason for Appointment *</label>
+                                <textarea class="form-control" id="appointmentReason" rows="4" 
+                                          placeholder="Please provide detailed reason for requesting this appointment..." required></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="appointmentDetails" class="form-label">Additional Details (Optional)</label>
+                                <textarea class="form-control" id="appointmentDetails" rows="3" 
+                                          placeholder="Any additional information or documents you'd like to mention..."></textarea>
+                            </div>
+                            
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Important:</strong> 
+                                <ul class="mb-0 mt-2">
+                                    <li>Appointments require at least 2 days notice</li>
+                                    <li>You will receive confirmation via email or phone call within 24 hours</li>
+                                    <li>Please arrive 10 minutes before your scheduled time</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-outline-secondary" id="resetFormBtn">Clear Form</button>
+                                <button type="submit" class="btn btn-sa" id="submitAppointmentBtn">
+                                    <span id="submitText">Submit Appointment Request</span>
+                                    <span id="loadingSpinner" style="display: none;">
+                                        <i class="fas fa-spinner fa-spin ms-2"></i> Submitting...
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="alert alert-success mt-3" id="appointmentSuccess" style="display: none;">
+                            <h5><i class="fas fa-check-circle me-2"></i>Appointment Request Submitted!</h5>
+                            <p>Your appointment request has been sent to Tiangmaatla management.</p>
+                            <p class="mb-0"><strong>What happens next:</strong> You will receive a confirmation email or phone call within 24 hours to finalize your appointment.</p>
+                        </div>
+                        
+                        <div class="alert alert-danger mt-3" id="appointmentError" style="display: none;">
+                            <h5><i class="fas fa-exclamation-circle me-2"></i>Submission Error</h5>
+                            <p id="errorMessage">There was an error submitting your appointment. Please try again or contact us directly.</p>
+                        </div>
+                        
+                        <div class="alert alert-warning mt-3" id="dateWarning" style="display: none;">
+                            <p class="mb-0" id="warningMessage"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card border-0 shadow mt-4">
+                    <div class="card-body p-4">
+                        <h5 class="mb-3">How Appointment Booking Works</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex mb-3">
+                                    <div class="me-3">
+                                        <span class="badge bg-primary rounded-circle p-2">1</span>
+                                    </div>
+                                    <div>
+                                        <h6>Submit Request</h6>
+                                        <p class="small text-muted mb-0">Fill out this form with your appointment details</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <div class="me-3">
+                                        <span class="badge bg-primary rounded-circle p-2">2</span>
+                                    </div>
+                                    <div>
+                                        <h6>We Receive It</h6>
+                                        <p class="small text-muted mb-0">Your request goes directly to our Google Sheet for review</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex mb-3">
+                                    <div class="me-3">
+                                        <span class="badge bg-primary rounded-circle p-2">3</span>
+                                    </div>
+                                    <div>
+                                        <h6>We Contact You</h6>
+                                        <p class="small text-muted mb-0">We'll call or email you within 24 hours to confirm</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <span class="badge bg-primary rounded-circle p-2">4</span>
+                                    </div>
+                                    <div>
+                                        <h6>Appointment Finalized</h6>
+                                        <p class="small text-muted mb-0">Once confirmed, your appointment is scheduled</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <section id="contact" class="section-spacing bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="fw-bold mb-4">Contact Us</h2>
+                    <p class="lead">Get in touch with the Tiangmaatla Multipurpose Centre team</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card border-0 shadow">
+                        <div class="card-body p-5">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Contact Information</h5>
+                                    <ul class="list-unstyled mt-4">
+                                        <li class="mb-3"><i class="fas fa-map-marker-alt me-2 text-primary"></i> Sebayeng, Limpopo Province</li>
+                                        <li class="mb-3"><i class="fas fa-phone me-2 text-primary"></i> (015) 590 2376</li>
+                                        <li class="mb-3"><i class="fas fa-envelope me-2 text-primary"></i> Tiangmaatlatmc@gmail.com</li>
+                                        <li class="mb-3"><i class="fas fa-clock me-2 text-primary"></i> Mon-Thur: 8:00 AM - 4:00 PM</li>
+                                        <li class="mb-3"><i class="fas fa-clock me-2 text-primary"></i> Fri: 8:00 AM - 1:00 PM</li>
+                                    </ul>
+                                    
+                                    <div class="mt-4">
+                                        <h5>Find Us</h5>
+                                        <div class="mt-3 bg-light rounded p-3">
+                                            <div class="map-container">
+                                                <iframe 
+                                                    src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d3651.406450609424!2d29.6999190756572!3d-23.768536569236783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x1ec6c1224383af69%3A0xe1a9d193fe2071d7!2sTIANGMAATLA%20MULTIPURPOSE%20CENTER%2C%204005%2C%20Sebayeng%2C%200752!3m2!1d-23.768541499999998!2d29.702493999999998!5e0!3m2!1sen!2sza!4v1761515445233!5m2!1sen!2sza" 
+                                                    width="100%" 
+                                                    height="300" 
+                                                    style="border:0; border-radius: 8px;" 
+                                                    allowfullscreen="" 
+                                                    loading="lazy" 
+                                                    referrerpolicy="no-referrer-when-downgrade">
+                                                </iframe>
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <a href="https://maps.google.com/?q=Sebayeng+Limpopo+South+Africa" 
+                                                target="_blank" 
+                                                class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-directions me-2"></i>Get Directions to Tiangmaatla
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Send Us a Message</h5>
+                                    <form class="mt-4" id="contactForm">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Your Name *</label>
+                                            <input type="text" class="form-control" id="name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email Address *</label>
+                                            <input type="email" class="form-control" id="email" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="subject" class="form-label">Subject *</label>
+                                            <input type="text" class="form-control" id="subject" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="message" class="form-label">Message *</label>
+                                            <textarea class="form-control" id="message" rows="4" required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-sa w-100" id="contactSubmitBtn">Send Message to Tiangmaatla</button>
+                                    </form>
+
+                                    <div class="alert alert-success mt-3" id="contactSuccess" style="display: none;">
+                                        <h5>Message Ready to Send!</h5>
+                                        <p>Your email client should open with your message. Please send it to <strong>96studios.web@gmail.com</strong></p>
+                                        <p class="mb-0"><small>If your email didn't open, please send manually to: Tiangmaatlatmc@gmail.com</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3">
+                    <h5>About Us</h5>
+                    <p>Tiangmaatla Multipurpose Centre is a community development initiative in Sebayeng, Limpopo, providing essential services and economic opportunities.</p>
+                </div>
+                <div class="col-lg-3">
+                    <h5>Contact Info</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Sebayeng, Limpopo</li>
+                        <li><i class="fas fa-phone me-2"></i> (015) 590 2376</li>
+                        <li><i class="fas fa-envelope me-2"></i> Tiangmaatlatmc@gmail.com</li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3">
+                    <h5>Follow Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-tiktok fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>© 2026 Tiangmaatla Multipurpose Centre. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>
+                    <a href="#" class="text-white text-decoration-none">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+<script>
+
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+    
+    const emailBody = `
+CONTACT FORM SUBMISSION - TIANGMAATLA MULTIPURPOSE CENTRE
+
+From: ${name}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+
+Submitted via Tiangmaatla Website on ${new Date().toLocaleDateString()}
+    `;
+    
+    const mailtoLink = `mailto:tiangmaatlatmc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+    
+    window.location.href = mailtoLink;
+    
+    document.getElementById('contactSuccess').style.display = 'block';
+    
+    setTimeout(() => {
+        document.getElementById('contactForm').reset();
+    }, 1000);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    fadeElements.forEach(element => {
+        observer.observe(element);
+    });
+    
+    const progressBars = document.querySelectorAll('.progress-bar');
+    progressBars.forEach(bar => {
+        const width = bar.style.width;
+        bar.style.width = '0';
+        setTimeout(() => {
+            bar.style.transition = 'width 2s ease-in-out';
+            bar.style.width = width;
+        }, 500);
+    });
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    initMeetings();
+});
+
+
+</script>
+
+<script>
+const meetingsConfig = {
+    currentMeeting: {
+        id: 1,
+        title: "Staff Management Meeting",
+        date: "2026-04-29",
+        time: "11:00",
+        duration: 2, // 1 = hours, 0.50 = 30 min 
+        venue: "Tiangmaatla Multipurpose Centre",
+        chair: "Manager Matsi M",
+        agenda: [
+            "Programme Reports",
+            "Resolution",
+        ],
+        attendees: [
+            "Manager Matsi M",
+            "Office Management",
+            "Finance Office"
+        ],
+        meetingLink: ""
+    },
+    pastMeetings: [],
+    upcomingQueue: []
+};
+
+let saved = localStorage.getItem('tiangmaatlaMeetings');
+let meetingsData = null;
+
+try {
+    meetingsData = saved ? JSON.parse(saved) : null;
+} catch (e) {
+    meetingsData = null;
+}
+
+if (!meetingsData || !meetingsData.currentMeeting) {
+    meetingsData = meetingsConfig;
+    localStorage.setItem('tiangmaatlaMeetings', JSON.stringify(meetingsConfig));
+}
+
+let currentMeetingData = meetingsData.currentMeeting;
+let pastMeetingsData = meetingsData.pastMeetings;
+let upcomingQueueData = meetingsData.upcomingQueue;
+
+function saveMeetings() {
+    localStorage.setItem('tiangmaatlaMeetings', JSON.stringify({
+        currentMeeting: currentMeetingData,
+        pastMeetings: pastMeetingsData,
+        upcomingQueue: upcomingQueueData
+    }));
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-ZA', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+}
+
+function formatTime(timeString) {
+    const [h, m] = timeString.split(':');
+    let hour = parseInt(h);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12;
+    return `${hour}:${m} ${ampm}`;
+}
+
+function calculateEndTime(startTime, duration) {
+    const [hours, minutes] = startTime.split(':');
+    const startDate = new Date();
+    startDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    const endDate = new Date(startDate.getTime() + duration * 60 * 60 * 1000);
+    const endHours = endDate.getHours().toString().padStart(2, '0');
+    const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+    return `${endHours}:${endMinutes}`;
+}
+
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+function updateMeetingDisplay() {
+    if (!currentMeetingData) return;
+
+    setText('meetingTitle', currentMeetingData.title);
+    setText('meetingDateText', formatDate(currentMeetingData.date));
+
+    const startTime = formatTime(currentMeetingData.time);
+    const endTime = formatTime(calculateEndTime(currentMeetingData.time, currentMeetingData.duration));
+    setText('meetingTimeText', `${startTime} - ${endTime}`);
+
+    setText('meetingDurationText', `${currentMeetingData.duration} hours`);
+    setText('meetingVenueText', currentMeetingData.venue);
+    setText('meetingChairText', currentMeetingData.chair);
+
+    const agendaList = document.getElementById('meetingAgenda');
+    agendaList.innerHTML = '';
+    currentMeetingData.agenda.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        agendaList.appendChild(li);
+    });
+
+    const attendeesDiv = document.getElementById('meetingAttendees');
+    attendeesDiv.innerHTML = '';
+    currentMeetingData.attendees.forEach(person => {
+        const badge = document.createElement('span');
+        badge.className = 'attendee-badge';
+        badge.textContent = person;
+        attendeesDiv.appendChild(badge);
+    });
+}
+
+function startCountdown() {
+    if (!currentMeetingData) return;
+
+    const meetingDate = new Date(`${currentMeetingData.date}T${currentMeetingData.time}:00+02:00`);
+    const meetingEnd = new Date(meetingDate.getTime() + currentMeetingData.duration * 60 * 60 * 1000);
+
+    function update() {
+    const now = new Date();
+    let diff, statusText, timeText;
+
+    if (now < meetingDate) {
+        diff = meetingDate - now;
+        statusText = 'Upcoming';
+        timeText = '30 Minutes:';
+        document.getElementById('joinMeetingBtn').disabled = true;
+
+        const totalUntilStart = meetingDate - new Date(meetingDate.getTime() - 24 * 60 * 60 * 1000); 
+        const timePassed = 24 * 60 * 60 * 1000 - diff; 
+        const progress = Math.min(100, Math.max(0, (timePassed / (24 * 60 * 60 * 1000)) * 100));
+        
+        document.getElementById('countdownProgress').style.width = `${progress}%`;
+        setText('countdownStatusText', `${Math.round(progress)}% of countdown complete`);
+
+        document.getElementById('durationProgress').style.width = '0%';
+        setText('durationText', '0% completed');
+
+    } else if (now >= meetingDate && now <= meetingEnd) {
+        diff = meetingEnd - now;
+        statusText = 'Ongoing';
+        timeText = 'Meeting ends in:';
+        document.getElementById('joinMeetingBtn').disabled = false;
+
+        const totalDuration = meetingEnd - meetingDate;
+        const elapsed = totalDuration - diff;
+        const durationProgress = Math.min(100, (elapsed / totalDuration) * 100);
+
+        document.getElementById('durationProgress').style.width = `${durationProgress}%`;
+        setText('durationText', `${Math.round(durationProgress)}% completed`);
+
+        document.getElementById('countdownProgress').style.width = '100%';
+        setText('countdownStatusText', 'Countdown complete - Meeting in progress');
+
+    } else {
+        diff = 0;
+        statusText = 'Completed';
+        timeText = 'Meeting finished';
+        document.getElementById('countdownProgress').style.width = '100%';
+        setText('countdownStatusText', 'Countdown complete');
+        document.getElementById('durationProgress').style.width = '100%';
+        setText('durationText', '100% completed');
+        document.getElementById('joinMeetingBtn').disabled = true;
+    }
+
+    const statusBadge = document.getElementById('currentMeetingStatus');
+    if (statusBadge) {
+        statusBadge.textContent = statusText.toUpperCase();
+        statusBadge.className = 'meeting-status';
+        
+        if (statusText === 'Upcoming') {
+            statusBadge.classList.add('status-upcoming');
+        } else if (statusText === 'Ongoing') {
+            statusBadge.classList.add('status-ongoing');
+        } else {
+            statusBadge.classList.add('status-completed');
+        }
+    }
+
+    setText('meetingStatusText', statusText);
+    setText('timeUntilText', timeText);
+
+    if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        setText('days', days.toString().padStart(2, '0'));
+        setText('hours', hours.toString().padStart(2, '0'));
+        setText('minutes', minutes.toString().padStart(2, '0'));
+        setText('seconds', seconds.toString().padStart(2, '0'));
+    } else {
+        setText('days', '00');
+        setText('hours', '00');
+        setText('minutes', '00');
+        setText('seconds', '00');
+
+        moveToHistory();
+    }
+}
+
+    update();
+    setInterval(update, 1000);
+}
+
+function moveToHistory() {
+    if (!currentMeetingData) return;
+
+    pastMeetingsData.unshift({
+        id: currentMeetingData.id,
+        title: currentMeetingData.title,
+        date: currentMeetingData.date,
+        time: currentMeetingData.time,
+        duration: currentMeetingData.duration,
+        venue: currentMeetingData.venue,
+        summary: `Completed: ${currentMeetingData.title}`
+    });
+
+    if (upcomingQueueData.length > 0) {
+        currentMeetingData = upcomingQueueData.shift();
+    } else {
+        currentMeetingData = null;
+    }
+
+    saveMeetings();
+    initMeetings();
+}
+
+function updateHistoryDisplay() {
+    const container = document.getElementById('meetingsHistory');
+    if (!container) return;
+
+    const historyCard = container.closest('.meeting-history');
+
+    container.innerHTML = '';
+
+    if (pastMeetingsData.length === 0) {
+        if (historyCard) historyCard.style.display = 'none';
+        return;
+    }
+
+    if (historyCard) historyCard.style.display = 'block';
+
+    pastMeetingsData.forEach(meeting => {
+        const item = document.createElement('div');
+        item.className = 'meeting-history-item';
+
+        const startTime = formatTime(meeting.time);
+        const endTime = formatTime(calculateEndTime(meeting.time, meeting.duration));
+
+        item.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1">${meeting.title}</h6>
+                    <small class="text-muted">${formatDate(meeting.date)} | ${startTime} - ${endTime}</small>
+                    <p class="mb-0 mt-2">${meeting.summary}</p>
+                </div>
+                <span class="badge bg-secondary">COMPLETED</span>
+            </div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+function initMeetings() {
+    if (!currentMeetingData) {
+        document.getElementById('noMeetingScheduled').style.display = 'block';
+        document.getElementById('meetingScheduled').style.display = 'none';
+    } else {
+        document.getElementById('noMeetingScheduled').style.display = 'none';
+        document.getElementById('meetingScheduled').style.display = 'block';
+        updateMeetingDisplay();
+        startCountdown();
+    }
+    updateHistoryDisplay();
+}
+
+window.scheduleMeeting = function(meeting) {
+    if (!currentMeetingData) {
+        currentMeetingData = meeting;
+    } else {
+        upcomingQueueData.push(meeting);
+    }
+    saveMeetings();
+    initMeetings();
+};
+
+window.viewMeetings = function() {
+    console.log("Current:", currentMeetingData);
+    console.log("Past:", pastMeetingsData);
+    console.log("Queue:", upcomingQueueData);
+};
+
+document.addEventListener('DOMContentLoaded', initMeetings);
+</script>
+
+<script>
+const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwgCBTCpsFP-8EnTzNmO3EBwDHqmnHo9LTm4z7fNlAPTmCDvKARQlCplYesS2rjhPWn/exec';
+
+document.addEventListener('DOMContentLoaded', function() {
+    const appointmentDateInput = document.getElementById('appointmentDate');
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 2);
+    
+    const minDateString = minDate.toISOString().split('T')[0];
+    appointmentDateInput.min = minDateString;
+    
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 60);
+    const maxDateString = maxDate.toISOString().split('T')[0];
+    appointmentDateInput.max = maxDateString;
+    
+    appointmentDateInput.addEventListener('change', validateAppointmentDate);
+    document.getElementById('resetFormBtn').addEventListener('click', resetForm);
+    document.getElementById('appointmentForm').addEventListener('submit', submitAppointmentForm);
+});
+
+function validateAppointmentDate() {
+    const appointmentDateInput = document.getElementById('appointmentDate');
+    const dateWarning = document.getElementById('dateWarning');
+    const warningMessage = document.getElementById('warningMessage');
+    const selectedDate = new Date(appointmentDateInput.value);
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 2);
+    
+    if (selectedDate < minDate) {
+        warningMessage.textContent = 'Appointments must be scheduled at least 2 days in advance. Please select a later date.';
+        dateWarning.style.display = 'block';
+        appointmentDateInput.value = '';
+        return false;
+    }
+    
+    if (selectedDate.getDay() === 6 || selectedDate.getDay() === 0) {
+        warningMessage.textContent = 'Appointments are not available on weekends. Please select a weekday (Monday to Friday).';
+        dateWarning.style.display = 'block';
+        appointmentDateInput.value = '';
+        return false;
+    }
+    
+    dateWarning.style.display = 'none';
+    return true;
+}
+
+function resetForm() {
+    document.getElementById('appointmentForm').reset();
+    document.getElementById('appointmentSuccess').style.display = 'none';
+    document.getElementById('appointmentError').style.display = 'none';
+    document.getElementById('dateWarning').style.display = 'none';
+    
+    const appointmentDateInput = document.getElementById('appointmentDate');
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 2);
+    const minDateString = minDate.toISOString().split('T')[0];
+    appointmentDateInput.min = minDateString;
+}
+
+async function submitAppointmentForm(event) {
+    event.preventDefault();
+    
+    if (!validateAppointmentDate()) return;
+    
+    const form = document.getElementById('appointmentForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    const submitBtn = document.getElementById('submitAppointmentBtn');
+    const submitText = document.getElementById('submitText');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    
+    submitBtn.disabled = true;
+    submitText.style.display = 'none';
+    loadingSpinner.style.display = 'inline';
+    
+    const params = new URLSearchParams();
+    params.append('name', document.getElementById('appointmentName').value);
+    params.append('email', document.getElementById('appointmentEmail').value);
+    params.append('phone', document.getElementById('appointmentPhone').value);
+    params.append('type', document.getElementById('appointmentType').value);
+    params.append('date', document.getElementById('appointmentDate').value);
+    params.append('time', document.getElementById('appointmentTime').value);
+    params.append('subject', document.getElementById('appointmentSubject').value);
+    params.append('reason', document.getElementById('appointmentReason').value);
+    params.append('details', document.getElementById('appointmentDetails').value);
+    params.append('timestamp', new Date().toISOString());
+    
+    const url = `${GOOGLE_SHEETS_WEBAPP_URL}?${params.toString()}`;
+    
+    console.log('Submitting to:', url);
+    
+    try {
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        console.log('Response:', result);
+        
+        if (result.success) {
+            showSuccessMessage();
+        } else {
+            showErrorMessage(result.message || 'Submission failed');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showErrorMessage('Failed to submit. Please try again or contact us.');
+    } finally {
+        submitBtn.disabled = false;
+        submitText.style.display = 'inline';
+        loadingSpinner.style.display = 'none';
+    }
+}
+
+function showSuccessMessage() {
+    document.getElementById('appointmentSuccess').style.display = 'block';
+    document.getElementById('appointmentError').style.display = 'none';
+    document.getElementById('appointmentForm').style.display = 'none';
+    document.getElementById('appointmentSuccess').scrollIntoView({ behavior: 'smooth' });
+}
+
+function showErrorMessage(message) {
+    const errorElement = document.getElementById('appointmentError');
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.textContent = message;
+    errorElement.style.display = 'block';
+    errorElement.scrollIntoView({ behavior: 'smooth' });
+}
+
+function testConnection() {
+    const testUrl = `${GOOGLE_SHEETS_WEBAPP_URL}?test=1`;
+    fetch(testUrl)
+        .then(r => r.json())
+        .then(data => {
+            console.log('Test result:', data);
+            alert('Connection successful! Server says: ' + data.message);
+        })
+        .catch(err => {
+            console.error('Test failed:', err);
+            alert('Connection failed: ' + err.message);
+        });
+}
+</script>
+
+
+</body>
+</html>

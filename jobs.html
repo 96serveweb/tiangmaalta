@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employment Opportunities - Tiangmaatla Multipurpose Centre</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sa-green: #007749;
+            --sa-blue: #00194A;
+            --sa-yellow: #FFB612;
+            --sa-red: #E03C31;
+            --sa-black: #000000;
+            --sa-white: #FFFFFF;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding-top: 76px;
+        }
+        
+        .header-bar {
+            height: 8px;
+            background: linear-gradient(90deg, var(--sa-green) 25%, var(--sa-yellow) 25%, var(--sa-yellow) 50%, var(--sa-red) 50%, var(--sa-red) 75%, var(--sa-blue) 75%);
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background: linear-gradient(135deg, var(--sa-blue) 0%, var(--sa-black) 100%);
+        }
+        
+        .jobs-hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0 80px;
+        }
+        
+        .job-card {
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .job-status {
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .status-open {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-closed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn-sa {
+            background: var(--sa-green);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-sa:hover {
+            background: var(--sa-blue);
+            color: white;
+        }
+        
+        .footer {
+            background: var(--sa-blue);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+        
+        .job-details {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            position: relative;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--sa-green);
+            color: white;
+        }
+        
+        .application-modal .modal-content {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .application-modal .modal-header {
+            background: var(--sa-green);
+            color: white;
+        }
+        
+        .partner-logos {
+            background-color: white;
+            padding: 40px 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .partner-logo {
+            height: 80px;
+            filter: grayscale(100%);
+            transition: all 0.3s;
+            opacity: 0.7;
+        }
+        
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        
+        .file-list {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .file-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        
+        .pdf-download-btn {
+            background: var(--sa-blue);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .pdf-download-btn:hover {
+            background: var(--sa-green);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .pdf-download-btn i {
+            font-size: 16px;
+        }
+        
+        .closing-date-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            margin-right: 140px; 
+        }
+        
+        .pdf-unavailable {
+            color: #6c757d;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .pdf-download-btn,
+            .pdf-unavailable {
+                position: static;
+                margin-top: 10px;
+                display: block;
+            }
+            
+            .closing-date-container {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar"></div>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="/images/LOGO PNG.png" alt="SA Logo" width="40" height="40" class="d-inline-block align-top me-2">
+                Tiangmaatla.co.za
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="community-guides.html">guides</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news-updates.html">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="directory.html">directory</a></li>
+                    <li class="nav-item"><a class="nav-link" href="social-worker.html">Social development</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="jobs-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">Employment Opportunities</h1>
+                    <p class="lead mb-5">Join our team and contribute to community development in Sebayeng</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="partner-logos">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-4">
+                    <h3 class="fw-bold">Our Partners</h3>
+                    <p class="text-muted">Working together for community development</p>
+                </div>
+            </div>
+            <div class="logo-container">
+                <img src="/images/dic.png" alt="IDT Logo" class="partner-logo" style="height: 60px;">
+                <img src="/images/Logo_IDT.svg" alt="SA Government" class="partner-logo">
+                <img src="/images/Social_development_logo.png" alt="Limpopo Province" class="partner-logo">
+                <img src="/images/works_logo.png" alt="SASSA" class="partner-logo">
+                <img style="width: 300px; height: auto;" src="/images/beyond-zero.png" alt="SASSA" class="partner-logo">
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold">Current Vacancies</h2>
+                        <div>
+                            <button class="btn filter-btn me-2" id="filterOpen" data-filter="open">Open Positions</button>
+                            <button class="btn filter-btn active" id="filterAll" data-filter="all">All Positions</button>
+                        </div>
+                    </div>
+                    
+                    <div id="jobsList">
+                        <!-- wipopulated by JavaScript -->
+                    </div>
+                    
+                    <div class="text-center mt-5" id="noJobsMessage" style="display: none;">
+                        <h4>No Current Vacancies</h4>
+                        <p>There are no open positions at this time. Please check back later for new opportunities.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="card border-0 shadow">
+                        <div class="card-body p-5">
+                            <h3 class="fw-bold mb-4">How to Apply</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Online Application</h5>
+                                    <p>Fill out our online application form and we'll prepare an email with all your information.</p>
+                                    <button class="btn btn-sa" data-bs-toggle="modal" data-bs-target="#applicationModal">Apply Online</button>
+                                </div>
+                                <div class="col-md-6" hidden>
+                                    <h5>Option 2: Download & Email</h5>
+                                    <p>Download the application form, fill it out, and email it to us with your documents.</p>
+                                    <button class="btn btn-sa" id="downloadApplication">Download Form</button>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <h5>Application Requirements</h5>
+                            <ul>
+                                <li>Completed application form</li>
+                                <li>Comprehensive CV</li>
+                                <li>Certified copies of qualifications</li>
+                                <li>Certified copy of ID</li>
+                                <li>Driver's license (if required for the position)</li>
+                            </ul>
+                            
+                            <div class="alert alert-info mt-3">
+                                <strong>Email applications to:</strong> Tiangmaatlatmc@gmail.com<br>
+                                <strong>Subject format:</strong> Job Application - [Position Title]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade application-modal" id="applicationModal" tabindex="-1" aria-labelledby="applicationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="applicationModalLabel">Online Job Application</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success" id="successMessage" role="alert" style="display: none;">
+                        <h4 class="alert-heading">Application Ready!</h4>
+                        <p>Your email client should open with a pre-filled application. <strong>Please remember to attach your documents</strong> before sending.</p>
+                        <p>If your email didn't open automatically, please send to: <strong>Tiangmaatlatmc@gmail.com</strong></p>
+                    </div>
+
+                    <form id="jobApplicationForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="applicantName" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="applicantName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="applicantEmail" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="applicantEmail" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="applicantPhone" class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="applicantPhone" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="applicantPosition" class="form-label">Position Applying For *</label>
+                                    <select class="form-control" id="applicantPosition" required>
+                                        <option value="">Select a position</option>
+                                        <!-- populated by JavaScript -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="applicantMessage" class="form-label">Cover Letter / Motivation *</label>
+                            <textarea class="form-control" id="applicantMessage" rows="4" placeholder="Tell us why you're interested in this position and why you'd be a good fit..." required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Documents to Attach (Optional - you'll attach these in your email)</label>
+                            <div class="alert alert-warning">
+                                <strong>Important:</strong> After submitting this form, your email client will open. 
+                                <strong>You MUST manually attach these documents</strong> in the email before sending:
+                                <ul class="mb-0 mt-2">
+                                    <li>Your CV/Resume</li>
+                                    <li>Certified ID copy</li>
+                                    <li>Qualification certificates</li>
+                                    <li>Driver's license (if required)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-sa" id="submitApplicationBtn">Open Email to Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5>About Us</h5>
+                    <p>Tiangmaatla Multipurpose Centre is a community development initiative in Sebayeng, Limpopo, providing essential services and economic opportunities.</p>
+                </div>
+                <div class="col-lg-3">
+                    <h5>Contact Info</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Sebayeng, Limpopo</li>
+                        <li><i class="fas fa-phone me-2"></i> (015) 590 2376</li>
+                        <li><i class="fas fa-envelope me-2"></i> Tiangmaatlatmc@gmail.com</li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h5>Follow Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>© 2026 Tiangmaatla Multipurpose Centre. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>
+                    <a href="#" class="text-white text-decoration-none">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <div id="approvalLoader" style="
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+">
+    <div class="bg-white p-5 rounded text-center shadow">
+        <div class="spinner-border text-success mb-3" role="status"></div>
+        <h5>Submitting Application for Approval...</h5>
+        <p>Please wait</p>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const jobs = [
+    {
+        id: 1,
+        title: "Internship Opportunity Programme",
+        department: "Internships",
+        location: "Solomondale / Sebayeng, Limpopo",
+        status: "closed",
+        closingDate: "30 April 2026",
+        description: "Tiangmaatla Multipurpose Centre internship programme for graduates and diploma holders in various fields including HR, Finance, Social Work, IT, Agriculture, Psychology, Education, and more.",
+        requirements: [
+             "Human Resource",
+            "Finance",
+            "Accountant",
+            "Social Work",
+            "Health Science",
+            "Psychology",
+            "LLB",
+            "Designers",
+            "Administrators",
+            "Education",
+            "IT",
+            "Agriculture"
+        ],
+        addedAdvantage: [
+            "South African Citizen",
+            "Must be unemployed",
+            "Must not be in another funded learning programme"
+        ],
+        pdfAvailable: true,
+        pdfPath: "/jobs/SASSETA-INTERNSHIP-OPPORTUNITY.pdf",
+        pdfName: "Tiangmaatla_Internship_Opportunity.pdf",
+        employmentType: "12 Months Internship"
+    },
+    {
+        id: 2,
+        title: "Data Capturer",
+        department: "Administration",
+        location: "Sebayeng, Limpopo",
+        status: "closed",
+        closingDate: "12 February 2026",
+        description: "Seeking a detail-oriented and highly organized Data Capturer with experience to join our team. The successful candidate will play a critical role in ensuring accurate data entry, management, and integrity to support evidence-based decision-making and program improvement.",
+        requirements: [
+            "Minimum Grade 12/Matric certificate",
+            "Minimum 1 year of experience in data capturing",
+            "Proficiency in MS Excel, Word and PowerPoint",
+            "Internet and email skills",
+            "Strong attention to detail",
+            "Ability to work under pressure to meet deadlines",
+            "Excellent communication and organizational skills"
+        ],
+        addedAdvantage: [
+            "Experience with MS Office packages",
+            "Knowledge of data quality assurance processes",
+            "Understanding of program monitoring and evaluation principles"
+        ],
+        pdfAvailable: true,
+        pdfPath: "/jobs/Data_Capture_post_051540.pdf",
+        pdfName: "Data_Capturer_Tiangmaatla.pdf",
+        employmentType: "Contract"
+    },
+    {
+        id: 3,
+        title: "Auxiliary Social Worker / Social Worker - OVC Programme",
+        department: "Social Services",
+        location: "Sebayeng, Limpopo",
+        status: "closed",
+        closingDate: "12 January 2026",
+        description: "Seeking a qualified and compassionate Auxiliary Social Worker or Social Worker to support the implementation of the Orphans and Vulnerable Children (OVC) Programme. The successful candidate will supervise, mentor, and support Community Care Workers/Caregivers, while providing psychosocial services to OVC and their families.",
+        requirements: [
+            "Minimum Grade 12/Matric certificate",
+            "Ability to read, write, and compile basic reports",
+            "Willingness to conduct home visits and work within communities",
+            "1-3 years experience in OVC programmes, child protection, HIV-related services, or community-based social services",
+            "Qualification as an Auxiliary Social Worker registered with SACSSP OR Qualification as a Social Worker registered with SACSSP"
+        ],
+        addedAdvantage: [
+            "Experience supervising or supporting community workers",
+            "Experience working with NGOs or Community-Based Organizations (CBOs)",
+            "Knowledge of OVC frameworks, child protection legislation, and referral systems"
+        ],
+        pdfAvailable: true,
+        pdfPath: "/jobs/Social_worker_post_051531.pdf",
+        pdfName: "Social_Worker_OVC_Tiangmaatla.pdf",
+        employmentType: "Fixed-Term Contract"
+    }
+];
+
+        function handlePDFDownload(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            
+            if (!job.pdfAvailable) {
+                alert('PDF download is not available for this position.');
+                return;
+            }
+            
+            if (job.pdfPath) {
+                window.open(job.pdfPath, '_blank');
+            } else {
+                downloadDynamicPDF(job);
+            }
+        }
+
+        function downloadDynamicPDF(job) {
+            const pdfContent = `
+                Tiangmaatla Multipurpose Centre
+                =================================
+                
+                JOB ADVERTISEMENT
+                Position: ${job.title}
+                Department: ${job.department}
+                Location: ${job.location}
+                Status: ${job.status === 'open' ? 'OPEN FOR APPLICATIONS' : 'CLOSED'}
+                Closing Date: ${job.closingDate}
+                
+                =================================
+                
+                POSITION DESCRIPTION:
+                ${job.description}
+                
+                =================================
+                
+                REQUIREMENTS:
+                ${job.requirements.map((req, index) => `${index + 1}. ${req}`).join('\n')}
+                
+                =================================
+                
+                HOW TO APPLY:
+                1. Download the application form from our website
+                2. Complete all sections of the form
+                3. Prepare the following documents:
+                   - Comprehensive CV/Resume
+                   - Certified copies of qualifications
+                   - Certified copy of ID
+                   - Driver's license (if required)
+                4. Email your application to: Tiangmaatlatmc@gmail.com
+                5. Subject line must be: "Job Application - ${job.title}"
+                
+                =================================
+                
+                IMPORTANT NOTES:
+                - Late applications will not be considered
+                - Only shortlisted candidates will be contacted
+                - If you don't hear from us within 30 days of the closing date,
+                  please consider your application unsuccessful
+                - The Centre reserves the right not to make an appointment
+                
+                =================================
+                
+                CONTACT INFORMATION:
+                Tiangmaatla Multipurpose Centre
+                Sebayeng, Limpopo
+                Phone: (015) 590 2376
+                Email: Tiangmaatlatmc@gmail.com
+                Website: www.tiangmaatla.co.za
+                
+                =================================
+                
+                Generated on: ${new Date().toLocaleDateString()}
+                Document ID: TMC-JOB-${job.id}-${new Date().getFullYear()}
+            `;
+            
+            const blob = new Blob([pdfContent], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = job.pdfName;
+            document.body.appendChild(a);
+            a.click();
+            
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function renderJobs(filter = 'all') {
+            const jobsList = document.getElementById('jobsList');
+            const noJobsMessage = document.getElementById('noJobsMessage');
+            
+            jobsList.innerHTML = '';
+            
+            const filteredJobs = filter === 'open' 
+                ? jobs.filter(job => job.status === 'open')
+                : jobs;
+            
+            if (filteredJobs.length === 0) {
+                noJobsMessage.style.display = 'block';
+                return;
+            } else {
+                noJobsMessage.style.display = 'none';
+            }
+            
+            filteredJobs.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = 'job-card card mb-4';
+                
+                const pdfButton = job.pdfAvailable 
+                    ? `<a href="${job.pdfPath || '#'}" class="pdf-download-btn" ${job.pdfPath ? 'target="_blank"' : `onclick="handlePDFDownload(${job.id})"`}>
+                          <i class="fas fa-file-pdf"></i> Download
+                       </a>`
+                    : `<span class="pdf-unavailable">
+                          <i class="fas fa-info-circle"></i> No PDF available
+                       </span>`;
+                
+                jobCard.innerHTML = `
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <span class="job-status ${job.status === 'open' ? 'status-open' : 'status-closed'}">
+                                    ${job.status === 'open' ? 'Open' : 'Closed'}
+                                </span>
+                                <h4 class="card-title mt-2">${job.title}</h4>
+                            </div>
+                            ${job.status === 'open' ? 
+                                `<button class="btn btn-sa" onclick="applyForJob(${job.id})">Apply Now</button>` : 
+                                `<button class="btn btn-secondary" disabled>Closed</button>`
+                            }
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p class="mb-1"><i class="fas fa-building me-2"></i> ${job.department}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i> ${job.location}</p>
+                            </div>
+                        </div>
+                        
+                        <p class="card-text">${job.description}</p>
+                        
+                        <div class="job-details mt-3">
+                            <h5>Requirements:</h5>
+                            <ul>
+                                ${job.requirements.map(req => `<li>${req}</li>`).join('')}
+                            </ul>
+                            <div class="closing-date-container">
+                                <p class="mb-0"><strong>Closing Date:</strong> ${job.closingDate}</p>
+                            </div>
+                            ${pdfButton}
+                        </div>
+                    </div>
+                `;
+                
+                jobsList.appendChild(jobCard);
+            });
+            
+            updatePositionDropdown();
+        }
+
+        function updatePositionDropdown() {
+            const positionSelect = document.getElementById('applicantPosition');
+            positionSelect.innerHTML = '<option value="">Select a position</option>';
+            
+            const openJobs = jobs.filter(job => job.status === 'open');
+            openJobs.forEach(job => {
+                const option = document.createElement('option');
+                option.value = job.id;
+                option.textContent = job.title;
+                positionSelect.appendChild(option);
+            });
+        }
+
+        function applyForJob(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (job) {
+                document.getElementById('jobApplicationForm').reset();
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('jobApplicationForm').style.display = 'block';
+                
+                document.getElementById('applicantPosition').value = jobId;
+                const applicationModal = new bootstrap.Modal(document.getElementById('applicationModal'));
+                applicationModal.show();
+            }
+        }
+
+        function submitApplication() {
+            const form = document.getElementById('jobApplicationForm');
+            
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const jobId = document.getElementById('applicantPosition').value;
+            const job = jobs.find(j => j.id === parseInt(jobId));
+            
+            const name = document.getElementById('applicantName').value;
+            const email = document.getElementById('applicantEmail').value;
+            const phone = document.getElementById('applicantPhone').value;
+            const message = document.getElementById('applicantMessage').value;
+            
+            const subject = `Job Application - ${job.title}`;
+            const body = `
+JOB APPLICATION - TIANGMAATLA MULTIPURPOSE CENTRE
+
+Applicant Information:
+=====================
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Position: ${job.title}
+Department: ${job.department}
+
+Cover Letter/Motivation:
+=======================
+${message}
+
+Application submitted via Tiangmaatla Website on ${new Date().toLocaleDateString()}
+
+IMPORTANT: Please attach the following documents to this email:
+- CV/Resume
+- Certified ID Copy
+- Qualification Certificates
+- Driver's License (if required)
+            `;
+            
+            const mailtoLink = `mailto:tiangmaatlatmc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            window.location.href = mailtoLink;
+            
+            document.getElementById('jobApplicationForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        function downloadApplicationForm() {
+            const pdfContent = `
+                Tiangmaatla Multipurpose Centre
+                Job Application Form
+                =================================
+                
+                Personal Information:
+                Full Name: _________________________
+                ID Number: _________________________
+                Physical Address: __________________
+                ___________________________________
+                Postal Address: ____________________
+                ___________________________________
+                Phone: _____________________________
+                Email: _____________________________
+                
+                Position Applied For: _______________
+                Department: ________________________
+                
+                Education History:
+                Institution | Qualification | Year
+                ___________________________________
+                ___________________________________
+                ___________________________________
+                
+                Work Experience:
+                Employer | Position | Period | Responsibilities
+                _______________________________________________
+                _______________________________________________
+                _______________________________________________
+                
+                References (2):
+                Name: _______________ Relationship: _______ Phone: ________
+                Name: _______________ Relationship: _______ Phone: ________
+                
+                I certify that the information provided is true and correct.
+                
+                Signature: ___________________ Date: __________
+                
+                =================================
+                Email completed form to: Tiangmaatlatmc@gmail.com
+                Subject: Job Application - [Position Title]
+            `;
+            
+            const blob = new Blob([pdfContent], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Tiangmaatla_Job_Application.pdf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Application form downloaded successfully! Please email the completed form to Tiangmaatlatmc@gmail.com');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderJobs();
+            
+            document.getElementById('filterOpen').addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                renderJobs('open');
+            });
+            
+            document.getElementById('filterAll').addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                renderJobs('all');
+            });
+            
+            document.getElementById('downloadApplication').addEventListener('click', downloadApplicationForm);
+            document.getElementById('submitApplicationBtn').addEventListener('click', submitApplication);
+        });
+    </script>
+</body>
+</html>
