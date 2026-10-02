@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiangmaatla Admin Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--green:#007749;--navy:#00194A;--gold:#FFB612;--red:#E03C31;--bg:#f4f6f8}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#18212b}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:var(--navy);color:#fff;padding:24px 16px;z-index:20}
+.brand{font-weight:700;font-size:20px;padding:8px 10px 24px;border-bottom:1px solid rgba(255,255,255,.15);margin-bottom:18px}
+.brand small{display:block;font-size:12px;font-weight:400;opacity:.75;margin-top:4px}
+.nav-btn{width:100%;border:0;background:transparent;color:#fff;text-align:left;padding:12px 13px;border-radius:8px;margin:3px 0;font-size:14px}
+.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,.12)}
+.nav-btn i{width:24px}.main{margin-left:250px;padding:28px;max-width:1500px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.topbar h1{font-size:28px;margin:0}.user-area{display:flex;gap:10px;align-items:center}.card{border:0;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06)}.stat{padding:20px}.stat .num{font-size:30px;font-weight:700}.stat .label{font-size:13px;color:#6c757d}.section{display:none}.section.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.section-head h2{font-size:22px;margin:0}.table-wrap{overflow:auto}.table{margin-bottom:0}.table th{white-space:nowrap}.actions{white-space:nowrap}.btn-primary{background:var(--green);border-color:var(--green)}.btn-primary:hover{background:#00633d;border-color:#00633d}.badge-open{background:#d8f3e7;color:#087443}.badge-closed{background:#f8d7da;color:#842029}.badge-pending{background:#fff3cd;color:#664d03}.modal-header{background:var(--navy);color:#fff}.form-label{font-weight:600;font-size:13px}.hidden{display:none!important}.empty{padding:40px;text-align:center;color:#777}.alert{border-radius:9px}.json-help{font-size:12px;color:#6c757d}.mobile-menu{display:none}.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}.login-card{width:100%;max-width:430px}.login-brand{color:var(--navy);font-weight:700;font-size:24px}.login-brand small{display:block;color:#6c757d;font-size:13px;font-weight:400;margin-top:4px}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:18px}.mobile-menu{display:inline-block}.topbar h1{font-size:22px}.user-area span{display:none}}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="login-screen">
+  <div class="card login-card p-4 p-md-5">
+    <div class="text-center mb-4">
+      <div class="login-brand">Tiangmaatla Admin</div>
+      <small class="text-secondary">Multipurpose Centre</small>
+    </div>
+    <div id="loginMessage"></div>
+    <form id="loginForm">
+      <div class="mb-3">
+        <label class="form-label" for="loginEmail">Email address</label>
+        <input type="email" class="form-control" id="loginEmail" autocomplete="username" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="loginPassword">Password</label>
+        <input type="password" class="form-control" id="loginPassword" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100" id="loginBtn">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<aside class="sidebar hidden" id="sidebar">
+  <div class="brand">Tiangmaatla Admin<small>Multipurpose Centre</small></div>
+  <button class="nav-btn active" data-section="dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</button>
+  <button class="nav-btn" data-section="news"><i class="fa-solid fa-newspaper"></i> News & Updates</button>
+  <button class="nav-btn" data-section="jobs"><i class="fa-solid fa-briefcase"></i> Jobs</button>
+  <button class="nav-btn" data-section="meetings"><i class="fa-solid fa-users"></i> Meetings</button>
+  <button class="nav-btn" data-section="appointments"><i class="fa-solid fa-calendar-check"></i> Appointments</button>
+  <button class="nav-btn mt-4" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
+</aside>
+
+<main class="main hidden" id="adminApp">
+  <div class="topbar">
+    <div><button class="btn btn-outline-secondary mobile-menu me-2" id="mobileMenuBtn"><i class="fa-solid fa-bars"></i></button><h1 class="d-inline">Admin Dashboard</h1></div>
+    <div class="user-area"><span id="adminEmail"></span></div>
+  </div>
+
+  <div id="message"></div>
+
+  <section id="dashboard" class="section active">
+    <div class="row g-3 mb-4">
+      <div class="col-md-6 col-xl-3"><div class="card stat"><div class="num" id="statNews">0</div><div class="label">News posts</div></div></div>
+      <div class="col-md-6 col-xl-3"><div class="card stat"><div class="num" id="statJobs">0</div><div class="label">Jobs</div></div></div>
+      <div class="col-md-6 col-xl-3"><div class="card stat"><div class="num" id="statMeetings">0</div><div class="label">Meetings</div></div></div>
+      <div class="col-md-6 col-xl-3"><div class="card stat"><div class="num" id="statAppointments">0</div><div class="label">Appointments</div></div></div>
+    </div>
+    <div class="card p-4"><h2 class="h5">Tiangmaatla content management</h2><p class="mb-0 text-secondary">Use the menu to manage News & Updates, Jobs, Meetings and Appointments. Changes are stored in the Tiangmaatla Supabase database.</p></div>
+  </section>
+
+  <section id="news" class="section">
+    <div class="section-head"><h2>News & Updates</h2><button class="btn btn-primary" id="addNewsBtn"><i class="fa-solid fa-plus"></i> Add post</button></div>
+    <div class="card p-3"><div class="table-wrap"><table class="table align-middle"><thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Published</th><th>Image filename</th><th>Actions</th></tr></thead><tbody id="newsTable"></tbody></table></div></div>
+  </section>
+
+  <section id="jobs" class="section">
+    <div class="section-head"><h2>Jobs</h2><button class="btn btn-primary" id="addJobBtn"><i class="fa-solid fa-plus"></i> Add job</button></div>
+    <div class="card p-3"><div class="table-wrap"><table class="table align-middle"><thead><tr><th>Title</th><th>Department</th><th>Location</th><th>Status</th><th>Closing date</th><th>Actions</th></tr></thead><tbody id="jobsTable"></tbody></table></div></div>
+  </section>
+
+  <section id="meetings" class="section">
+    <div class="section-head"><h2>Meetings</h2><button class="btn btn-primary" id="addMeetingBtn"><i class="fa-solid fa-plus"></i> Add meeting</button></div>
+    <div class="card p-3"><div class="table-wrap"><table class="table align-middle"><thead><tr><th>Meeting</th><th>Date</th><th>Time</th><th>Venue</th><th>Status</th><th>Actions</th></tr></thead><tbody id="meetingsTable"></tbody></table></div></div>
+  </section>
+
+  <section id="appointments" class="section">
+    <div class="section-head"><h2>Appointments</h2><button class="btn btn-outline-secondary" id="refreshAppointmentsBtn"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button></div>
+    <div class="card p-3"><div class="table-wrap"><table class="table align-middle"><thead><tr><th>Name</th><th>Appointment</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead><tbody id="appointmentsTable"></tbody></table></div></div>
+  </section>
+</main>
+
+<div class="modal fade" id="newsModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form id="newsForm"><div class="modal-header"><h5 class="modal-title" id="newsModalTitle">Add news post</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="newsId"><div class="row g-3"><div class="col-md-8"><label class="form-label">Title</label><input class="form-control" id="newsTitle" required></div><div class="col-md-4"><label class="form-label">Category</label><input class="form-control" id="newsCategory" value="Announcements" required></div><div class="col-12"><label class="form-label">Excerpt</label><textarea class="form-control" id="newsExcerpt" rows="2"></textarea></div><div class="col-12"><label class="form-label">Content</label><textarea class="form-control" id="newsContent" rows="6" required></textarea></div><div class="col-md-6"><label class="form-label">Image filename</label><input class="form-control" id="newsImage" placeholder="example.jpg"><div class="json-help">Developer uploads this file to /assets/images/posts/</div></div><div class="col-md-3"><label class="form-label">Badge</label><input class="form-control" id="newsBadge"></div><div class="col-md-3"><label class="form-label">Badge text</label><input class="form-control" id="newsBadgeText"></div><div class="col-md-4"><label class="form-label">Published date</label><input type="date" class="form-control" id="newsDate"></div><div class="col-md-4 d-flex align-items-end"><div class="form-check"><input class="form-check-input" type="checkbox" id="newsPublished" checked><label class="form-check-label" for="newsPublished">Published</label></div></div></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-primary">Save post</button></div></form></div></div></div>
+
+<div class="modal fade" id="jobModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form id="jobForm"><div class="modal-header"><h5 class="modal-title" id="jobModalTitle">Add job</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="jobId"><div class="row g-3"><div class="col-md-7"><label class="form-label">Job title</label><input class="form-control" id="jobTitle" required></div><div class="col-md-5"><label class="form-label">Department</label><input class="form-control" id="jobDepartment"></div><div class="col-md-6"><label class="form-label">Location</label><input class="form-control" id="jobLocation"></div><div class="col-md-3"><label class="form-label">Status</label><select class="form-select" id="jobStatus"><option value="open">Open</option><option value="closed">Closed</option></select></div><div class="col-md-3"><label class="form-label">Closing date</label><input type="date" class="form-control" id="jobClosingDate"></div><div class="col-12"><label class="form-label">Description</label><textarea class="form-control" id="jobDescription" rows="5"></textarea></div><div class="col-md-6"><label class="form-label">Requirements</label><textarea class="form-control" id="jobRequirements" rows="5" placeholder="One requirement per line"></textarea></div><div class="col-md-6"><label class="form-label">Added advantages</label><textarea class="form-control" id="jobAdvantages" rows="5" placeholder="One advantage per line"></textarea></div><div class="col-md-6"><label class="form-label">Employment type</label><input class="form-control" id="jobEmploymentType"></div><div class="col-md-2 d-flex align-items-end"><div class="form-check"><input class="form-check-input" type="checkbox" id="jobPdfAvailable"><label class="form-check-label" for="jobPdfAvailable">PDF available</label></div></div><div class="col-md-4"><label class="form-label">PDF path</label><input class="form-control" id="jobPdfPath" placeholder="assets/jobs/file.pdf"></div><div class="col-md-6"><label class="form-label">PDF filename</label><input class="form-control" id="jobPdfName"></div></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-primary">Save job</button></div></form></div></div></div>
+
+<div class="modal fade" id="meetingModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form id="meetingForm"><div class="modal-header"><h5 class="modal-title" id="meetingModalTitle">Add meeting</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="meetingId"><div class="row g-3"><div class="col-md-8"><label class="form-label">Meeting title</label><input class="form-control" id="meetingTitle" required></div><div class="col-md-4"><label class="form-label">Status</label><select class="form-select" id="meetingStatus"><option value="upcoming">Upcoming</option><option value="ongoing">Ongoing</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></div><div class="col-md-4"><label class="form-label">Date</label><input type="date" class="form-control" id="meetingDate" required></div><div class="col-md-4"><label class="form-label">Time</label><input type="time" class="form-control" id="meetingTime" required></div><div class="col-md-4"><label class="form-label">Duration (hours)</label><input type="number" step="0.25" min="0.25" class="form-control" id="meetingDuration" value="1"></div><div class="col-md-6"><label class="form-label">Venue</label><input class="form-control" id="meetingVenue"></div><div class="col-md-6"><label class="form-label">Chair</label><input class="form-control" id="meetingChair"></div><div class="col-md-6"><label class="form-label">Meeting link</label><input class="form-control" id="meetingLink" type="url"></div><div class="col-md-6"><label class="form-label">Agenda</label><textarea class="form-control" id="meetingAgenda" rows="5" placeholder="One item per line"></textarea></div><div class="col-12"><label class="form-label">Attendees</label><textarea class="form-control" id="meetingAttendees" rows="4" placeholder="One attendee per line"></textarea></div></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-primary">Save meeting</button></div></form></div></div></div>
+
+<div class="modal fade" id="appointmentModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="appointmentForm"><div class="modal-header"><h5 class="modal-title">Appointment</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="appointmentId"><div class="mb-3"><label class="form-label">Name</label><input class="form-control" id="appointmentName" readonly></div><div class="row g-3"><div class="col-md-6"><label class="form-label">Email</label><input class="form-control" id="appointmentEmail" readonly></div><div class="col-md-6"><label class="form-label">Phone</label><input class="form-control" id="appointmentPhone" readonly></div><div class="col-md-6"><label class="form-label">Type</label><input class="form-control" id="appointmentType" readonly></div><div class="col-md-3"><label class="form-label">Date</label><input class="form-control" id="appointmentDate" readonly></div><div class="col-md-3"><label class="form-label">Time</label><input class="form-control" id="appointmentTime" readonly></div><div class="col-12"><label class="form-label">Subject</label><input class="form-control" id="appointmentSubject" readonly></div><div class="col-12"><label class="form-label">Reason</label><textarea class="form-control" id="appointmentReason" rows="2" readonly></textarea></div><div class="col-12"><label class="form-label">Details</label><textarea class="form-control" id="appointmentDetails" rows="4" readonly></textarea></div><div class="col-md-6"><label class="form-label">Status</label><select class="form-select" id="appointmentStatus"><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></div><div class="col-12"><label class="form-label">Admin notes</label><textarea class="form-control" id="appointmentNotes" rows="3"></textarea></div></div></div><div class="modal-footer"><button type="button" class="btn btn-danger me-auto" id="deleteAppointmentBtn">Delete</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-primary">Save changes</button></div></form></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="tmc-admin.js"></script>
+</body>
+</html>

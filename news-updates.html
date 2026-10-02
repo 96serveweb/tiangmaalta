@@ -326,43 +326,36 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
 
-        const newsArticles = [
-            {
-                id: 1,
-                title: "Applications Status",
-                excerpt: "Current application period status for Tiangmaatla programmes.",
-                content: `<p>All applications are currently closed. No submissions are being accepted at this time. Future opportunities will be announced on this website when available.</p>`,
-                image: "/images/tmc_2.jpg",
-                category: "Announcements",
-                date: "2026-05-14",
-                badge: "badge-alert",
-                badgeText: "CLOSED"
-            },
-            {
-                id: 2,
-                title: "South Africa Unemployment Rate Rises to 32.7% in 2026",
-                excerpt: "Latest labour force data shows unemployment increased in the first quarter of 2026, with more than 8 million South Africans currently unemployed.",
-                content: `
-                    <p>Statistics South Africa released the latest Quarterly Labour Force Survey showing that the official unemployment rate increased from 31.4% in Q4 2025 to 32.7% in Q1 2026.</p>
+        let newsArticles = [];
 
-                    <p>The number of unemployed people increased to approximately <strong>8.1 million</strong>, while employment declined by about <strong>345,000 jobs</strong> during the quarter.</p>
+        const TMC_SUPABASE_URL = 'https://gwkcpbncazaeuiqdxqyn.supabase.co';
+const TMC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3a2NwYm5jYXphZXVpcWR4cXluIiwidHlwZSI6ImFub24iLCJpYXQiOjE3ODc2ODgyMzAsImV4cCI6MjEwMzI2NDIzMH0.bA0AwTwXn9TAK3szVxwiC9QQyRde3Dyt0DrSXABFQ1w';
+const tmcSupabase = supabase.createClient(TMC_SUPABASE_URL, TMC_SUPABASE_ANON_KEY);
 
-                    <p>Youth unemployment remains one of the country's biggest challenges, with many young South Africans still struggling to access employment opportunities, skills development, and work experience.</p>
-
-                    <p>Government and private sector stakeholders continue to focus on job creation, entrepreneurship support, infrastructure investment, and skills programmes to address the unemployment crisis.</p>
-
-                    <p><strong>Source:</strong> Statistics South Africa Quarterly Labour Force Survey (Q1 2026).</p>
-                `,
-                image: "/images/unemployment.jpg",
-                category: "Economy",
-                date: "2026-05-12",
-                badge: "badge-story",
-                badgeText: "ECONOMY"
-            }
-        ];
+        async function loadNewsFromSupabase() {
+            const { data, error } = await tmcSupabase
+                .from('tmc_news_posts')
+                .select('*')
+                .eq('published', true)
+                .order('published_date', { ascending: false })
+                .order('created_at', { ascending: false });
+            if (error) throw error;
+            newsArticles = (data || []).map(article => ({
+                id: article.id,
+                title: article.title || '',
+                excerpt: article.excerpt || '',
+                content: article.content || '',
+                image: article.image_filename ? `/assets/images/posts/${encodeURI(article.image_filename)}` : '',
+                category: article.category || 'Announcements',
+                date: article.published_date || article.created_at,
+                badge: article.badge || '',
+                badgeText: article.badge_text || ''
+            }));
+        }
 
         let currentSearch = '';
         let currentCategory = '';
@@ -466,9 +459,20 @@
             renderNews();
         });
 
-        renderCategories();
-        renderRecent();
-        renderNews();
+        async function initNewsPage() {
+            const container = document.getElementById('newsFeed');
+            try {
+                await loadNewsFromSupabase();
+                renderCategories();
+                renderRecent();
+                renderNews();
+            } catch (error) {
+                console.error('Unable to load news:', error);
+                container.innerHTML = '<div class="alert alert-danger text-center">Unable to load news at this time. Please try again later.</div>';
+            }
+        }
+
+        initNewsPage();
     </script>
 </body>
 </html>

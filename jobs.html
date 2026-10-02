@@ -465,94 +465,37 @@
     </div>
 </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const jobs = [
-    {
-        id: 1,
-        title: "Internship Opportunity Programme",
-        department: "Internships",
-        location: "Solomondale / Sebayeng, Limpopo",
-        status: "closed",
-        closingDate: "30 April 2026",
-        description: "Tiangmaatla Multipurpose Centre internship programme for graduates and diploma holders in various fields including HR, Finance, Social Work, IT, Agriculture, Psychology, Education, and more.",
-        requirements: [
-             "Human Resource",
-            "Finance",
-            "Accountant",
-            "Social Work",
-            "Health Science",
-            "Psychology",
-            "LLB",
-            "Designers",
-            "Administrators",
-            "Education",
-            "IT",
-            "Agriculture"
-        ],
-        addedAdvantage: [
-            "South African Citizen",
-            "Must be unemployed",
-            "Must not be in another funded learning programme"
-        ],
-        pdfAvailable: true,
-        pdfPath: "/jobs/SASSETA-INTERNSHIP-OPPORTUNITY.pdf",
-        pdfName: "Tiangmaatla_Internship_Opportunity.pdf",
-        employmentType: "12 Months Internship"
-    },
-    {
-        id: 2,
-        title: "Data Capturer",
-        department: "Administration",
-        location: "Sebayeng, Limpopo",
-        status: "closed",
-        closingDate: "12 February 2026",
-        description: "Seeking a detail-oriented and highly organized Data Capturer with experience to join our team. The successful candidate will play a critical role in ensuring accurate data entry, management, and integrity to support evidence-based decision-making and program improvement.",
-        requirements: [
-            "Minimum Grade 12/Matric certificate",
-            "Minimum 1 year of experience in data capturing",
-            "Proficiency in MS Excel, Word and PowerPoint",
-            "Internet and email skills",
-            "Strong attention to detail",
-            "Ability to work under pressure to meet deadlines",
-            "Excellent communication and organizational skills"
-        ],
-        addedAdvantage: [
-            "Experience with MS Office packages",
-            "Knowledge of data quality assurance processes",
-            "Understanding of program monitoring and evaluation principles"
-        ],
-        pdfAvailable: true,
-        pdfPath: "/jobs/Data_Capture_post_051540.pdf",
-        pdfName: "Data_Capturer_Tiangmaatla.pdf",
-        employmentType: "Contract"
-    },
-    {
-        id: 3,
-        title: "Auxiliary Social Worker / Social Worker - OVC Programme",
-        department: "Social Services",
-        location: "Sebayeng, Limpopo",
-        status: "closed",
-        closingDate: "12 January 2026",
-        description: "Seeking a qualified and compassionate Auxiliary Social Worker or Social Worker to support the implementation of the Orphans and Vulnerable Children (OVC) Programme. The successful candidate will supervise, mentor, and support Community Care Workers/Caregivers, while providing psychosocial services to OVC and their families.",
-        requirements: [
-            "Minimum Grade 12/Matric certificate",
-            "Ability to read, write, and compile basic reports",
-            "Willingness to conduct home visits and work within communities",
-            "1-3 years experience in OVC programmes, child protection, HIV-related services, or community-based social services",
-            "Qualification as an Auxiliary Social Worker registered with SACSSP OR Qualification as a Social Worker registered with SACSSP"
-        ],
-        addedAdvantage: [
-            "Experience supervising or supporting community workers",
-            "Experience working with NGOs or Community-Based Organizations (CBOs)",
-            "Knowledge of OVC frameworks, child protection legislation, and referral systems"
-        ],
-        pdfAvailable: true,
-        pdfPath: "/jobs/Social_worker_post_051531.pdf",
-        pdfName: "Social_Worker_OVC_Tiangmaatla.pdf",
-        employmentType: "Fixed-Term Contract"
-    }
-];
+        let jobs = [];
+
+        const TMC_SUPABASE_URL = 'https://gwkcpbncazaeuiqdxqyn.supabase.co';
+const TMC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3a2NwYm5jYXphZXVpcWR4cXluIiwidHlwZSI6ImFub24iLCJpYXQiOjE3ODc2ODgyMzAsImV4cCI6MjEwMzI2NDIzMH0.bA0AwTwXn9TAK3szVxwiC9QQyRde3Dyt0DrSXABFQ1w';
+const tmcSupabase = supabase.createClient(TMC_SUPABASE_URL, TMC_SUPABASE_ANON_KEY);
+
+        async function loadJobsFromSupabase() {
+            const { data, error } = await tmcSupabase
+                .from('tmc_jobs')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (error) throw error;
+            jobs = (data || []).map(job => ({
+                id: job.id,
+                title: job.title || '',
+                department: job.department || '',
+                location: job.location || '',
+                status: job.status || 'closed',
+                closingDate: job.closing_date ? new Date(`${job.closing_date}T00:00:00`).toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Not specified',
+                description: job.description || '',
+                requirements: Array.isArray(job.requirements) ? job.requirements : [],
+                addedAdvantage: Array.isArray(job.added_advantage) ? job.added_advantage : [],
+                pdfAvailable: !!job.pdf_available,
+                pdfPath: job.pdf_path || '',
+                pdfName: job.pdf_name || 'Tiangmaatla_Job_Advertisement.pdf',
+                employmentType: job.employment_type || ''
+            }));
+        }
 
         function handlePDFDownload(jobId) {
             const job = jobs.find(j => j.id === jobId);
@@ -847,8 +790,15 @@ IMPORTANT: Please attach the following documents to this email:
             alert('Application form downloaded successfully! Please email the completed form to Tiangmaatlatmc@gmail.com');
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            renderJobs();
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await loadJobsFromSupabase();
+                renderJobs();
+            } catch (error) {
+                console.error('Unable to load jobs:', error);
+                document.getElementById('jobsList').innerHTML = '<div class="alert alert-danger text-center">Unable to load job opportunities at this time. Please try again later.</div>';
+                document.getElementById('noJobsMessage').style.display = 'none';
+            }
             
             document.getElementById('filterOpen').addEventListener('click', function() {
                 document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));

@@ -783,6 +783,61 @@
         padding-top: 20px;
     }
 }
+
+
+
+/* Temporary Event Ticker */
+.event-ticker {
+    width: 100%;
+    overflow: hidden;
+    background: #00194A;
+    color: #FFB612;
+    border-bottom: 3px solid #E03C31;
+    white-space: nowrap;
+    height: 42px;
+    display: flex;
+    align-items: center;
+}
+
+.event-ticker-track {
+    display: flex;
+    width: max-content;
+    animation: eventTickerMove 24s linear infinite;
+}
+
+.event-ticker-content {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.event-ticker-content span {
+    display: inline-block;
+    padding-right: 100px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+@keyframes eventTickerMove {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 768px) {
+    .event-ticker {
+        height: 38px;
+    }
+
+    .event-ticker-content span {
+        font-size: 14px;
+        padding-right: 70px;
+    }
+}
 </style>
 </head>
 <body>
@@ -807,12 +862,22 @@
                     <li class="nav-item"><a class="nav-link" href="community-guides.html">guides</a></li>
                     <li class="nav-item"><a class="nav-link" href="news-updates.html">News</a></li>
                     <li class="nav-item"><a class="nav-link" href="directory.html">directory</a></li>
-                    <li class="nav-item"><a class="nav-link" href="social-worker.html">Social development</a></li>
+                    <li class="nav-item"><a class="nav-link" href="learning.html">Learning</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+
+    <!-- Temporary Event Notice -->
+<div class="event-ticker">
+    <div class="event-ticker-track">
+        <div class="event-ticker-content">
+            <span>Big Event coming soon 16 October 2026 - Computer Lab Opening Ceremony</span>
+            <span>Big Event coming soon 16 October 2026 - Computer Lab Opening Ceremony</span>
+        </div>
+    </div>
+</div>
 
     <a href="https://wa.me/27739538642" class="whatsapp-icon" target="_blank">
         <i class="fab fa-whatsapp"></i>
@@ -1790,451 +1855,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const meetingsConfig = {
-    currentMeeting: {
-        id: 1,
-        title: "Staff Management Meeting",
-        date: "2026-04-29",
-        time: "11:00",
-        duration: 2, // 1 = hours, 0.50 = 30 min 
-        venue: "Tiangmaatla Multipurpose Centre",
-        chair: "Manager Matsi M",
-        agenda: [
-            "Programme Reports",
-            "Resolution",
-        ],
-        attendees: [
-            "Manager Matsi M",
-            "Office Management",
-            "Finance Office"
-        ],
-        meetingLink: ""
-    },
-    pastMeetings: [],
-    upcomingQueue: []
-};
-
-let saved = localStorage.getItem('tiangmaatlaMeetings');
-let meetingsData = null;
-
-try {
-    meetingsData = saved ? JSON.parse(saved) : null;
-} catch (e) {
-    meetingsData = null;
-}
-
-if (!meetingsData || !meetingsData.currentMeeting) {
-    meetingsData = meetingsConfig;
-    localStorage.setItem('tiangmaatlaMeetings', JSON.stringify(meetingsConfig));
-}
-
-let currentMeetingData = meetingsData.currentMeeting;
-let pastMeetingsData = meetingsData.pastMeetings;
-let upcomingQueueData = meetingsData.upcomingQueue;
-
-function saveMeetings() {
-    localStorage.setItem('tiangmaatlaMeetings', JSON.stringify({
-        currentMeeting: currentMeetingData,
-        pastMeetings: pastMeetingsData,
-        upcomingQueue: upcomingQueueData
-    }));
-}
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-ZA', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    });
-}
-
-function formatTime(timeString) {
-    const [h, m] = timeString.split(':');
-    let hour = parseInt(h);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12 || 12;
-    return `${hour}:${m} ${ampm}`;
-}
-
-function calculateEndTime(startTime, duration) {
-    const [hours, minutes] = startTime.split(':');
-    const startDate = new Date();
-    startDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-    const endDate = new Date(startDate.getTime() + duration * 60 * 60 * 1000);
-    const endHours = endDate.getHours().toString().padStart(2, '0');
-    const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
-    return `${endHours}:${endMinutes}`;
-}
-
-function setText(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
-}
-
-function updateMeetingDisplay() {
-    if (!currentMeetingData) return;
-
-    setText('meetingTitle', currentMeetingData.title);
-    setText('meetingDateText', formatDate(currentMeetingData.date));
-
-    const startTime = formatTime(currentMeetingData.time);
-    const endTime = formatTime(calculateEndTime(currentMeetingData.time, currentMeetingData.duration));
-    setText('meetingTimeText', `${startTime} - ${endTime}`);
-
-    setText('meetingDurationText', `${currentMeetingData.duration} hours`);
-    setText('meetingVenueText', currentMeetingData.venue);
-    setText('meetingChairText', currentMeetingData.chair);
-
-    const agendaList = document.getElementById('meetingAgenda');
-    agendaList.innerHTML = '';
-    currentMeetingData.agenda.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        agendaList.appendChild(li);
-    });
-
-    const attendeesDiv = document.getElementById('meetingAttendees');
-    attendeesDiv.innerHTML = '';
-    currentMeetingData.attendees.forEach(person => {
-        const badge = document.createElement('span');
-        badge.className = 'attendee-badge';
-        badge.textContent = person;
-        attendeesDiv.appendChild(badge);
-    });
-}
-
-function startCountdown() {
-    if (!currentMeetingData) return;
-
-    const meetingDate = new Date(`${currentMeetingData.date}T${currentMeetingData.time}:00+02:00`);
-    const meetingEnd = new Date(meetingDate.getTime() + currentMeetingData.duration * 60 * 60 * 1000);
-
-    function update() {
-    const now = new Date();
-    let diff, statusText, timeText;
-
-    if (now < meetingDate) {
-        diff = meetingDate - now;
-        statusText = 'Upcoming';
-        timeText = '30 Minutes:';
-        document.getElementById('joinMeetingBtn').disabled = true;
-
-        const totalUntilStart = meetingDate - new Date(meetingDate.getTime() - 24 * 60 * 60 * 1000); 
-        const timePassed = 24 * 60 * 60 * 1000 - diff; 
-        const progress = Math.min(100, Math.max(0, (timePassed / (24 * 60 * 60 * 1000)) * 100));
-        
-        document.getElementById('countdownProgress').style.width = `${progress}%`;
-        setText('countdownStatusText', `${Math.round(progress)}% of countdown complete`);
-
-        document.getElementById('durationProgress').style.width = '0%';
-        setText('durationText', '0% completed');
-
-    } else if (now >= meetingDate && now <= meetingEnd) {
-        diff = meetingEnd - now;
-        statusText = 'Ongoing';
-        timeText = 'Meeting ends in:';
-        document.getElementById('joinMeetingBtn').disabled = false;
-
-        const totalDuration = meetingEnd - meetingDate;
-        const elapsed = totalDuration - diff;
-        const durationProgress = Math.min(100, (elapsed / totalDuration) * 100);
-
-        document.getElementById('durationProgress').style.width = `${durationProgress}%`;
-        setText('durationText', `${Math.round(durationProgress)}% completed`);
-
-        document.getElementById('countdownProgress').style.width = '100%';
-        setText('countdownStatusText', 'Countdown complete - Meeting in progress');
-
-    } else {
-        diff = 0;
-        statusText = 'Completed';
-        timeText = 'Meeting finished';
-        document.getElementById('countdownProgress').style.width = '100%';
-        setText('countdownStatusText', 'Countdown complete');
-        document.getElementById('durationProgress').style.width = '100%';
-        setText('durationText', '100% completed');
-        document.getElementById('joinMeetingBtn').disabled = true;
-    }
-
-    const statusBadge = document.getElementById('currentMeetingStatus');
-    if (statusBadge) {
-        statusBadge.textContent = statusText.toUpperCase();
-        statusBadge.className = 'meeting-status';
-        
-        if (statusText === 'Upcoming') {
-            statusBadge.classList.add('status-upcoming');
-        } else if (statusText === 'Ongoing') {
-            statusBadge.classList.add('status-ongoing');
-        } else {
-            statusBadge.classList.add('status-completed');
-        }
-    }
-
-    setText('meetingStatusText', statusText);
-    setText('timeUntilText', timeText);
-
-    if (diff > 0) {
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        setText('days', days.toString().padStart(2, '0'));
-        setText('hours', hours.toString().padStart(2, '0'));
-        setText('minutes', minutes.toString().padStart(2, '0'));
-        setText('seconds', seconds.toString().padStart(2, '0'));
-    } else {
-        setText('days', '00');
-        setText('hours', '00');
-        setText('minutes', '00');
-        setText('seconds', '00');
-
-        moveToHistory();
-    }
-}
-
-    update();
-    setInterval(update, 1000);
-}
-
-function moveToHistory() {
-    if (!currentMeetingData) return;
-
-    pastMeetingsData.unshift({
-        id: currentMeetingData.id,
-        title: currentMeetingData.title,
-        date: currentMeetingData.date,
-        time: currentMeetingData.time,
-        duration: currentMeetingData.duration,
-        venue: currentMeetingData.venue,
-        summary: `Completed: ${currentMeetingData.title}`
-    });
-
-    if (upcomingQueueData.length > 0) {
-        currentMeetingData = upcomingQueueData.shift();
-    } else {
-        currentMeetingData = null;
-    }
-
-    saveMeetings();
-    initMeetings();
-}
-
-function updateHistoryDisplay() {
-    const container = document.getElementById('meetingsHistory');
-    if (!container) return;
-
-    const historyCard = container.closest('.meeting-history');
-
-    container.innerHTML = '';
-
-    if (pastMeetingsData.length === 0) {
-        if (historyCard) historyCard.style.display = 'none';
-        return;
-    }
-
-    if (historyCard) historyCard.style.display = 'block';
-
-    pastMeetingsData.forEach(meeting => {
-        const item = document.createElement('div');
-        item.className = 'meeting-history-item';
-
-        const startTime = formatTime(meeting.time);
-        const endTime = formatTime(calculateEndTime(meeting.time, meeting.duration));
-
-        item.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="mb-1">${meeting.title}</h6>
-                    <small class="text-muted">${formatDate(meeting.date)} | ${startTime} - ${endTime}</small>
-                    <p class="mb-0 mt-2">${meeting.summary}</p>
-                </div>
-                <span class="badge bg-secondary">COMPLETED</span>
-            </div>
-        `;
-        container.appendChild(item);
-    });
-}
-
-function initMeetings() {
-    if (!currentMeetingData) {
-        document.getElementById('noMeetingScheduled').style.display = 'block';
-        document.getElementById('meetingScheduled').style.display = 'none';
-    } else {
-        document.getElementById('noMeetingScheduled').style.display = 'none';
-        document.getElementById('meetingScheduled').style.display = 'block';
-        updateMeetingDisplay();
-        startCountdown();
-    }
-    updateHistoryDisplay();
-}
-
-window.scheduleMeeting = function(meeting) {
-    if (!currentMeetingData) {
-        currentMeetingData = meeting;
-    } else {
-        upcomingQueueData.push(meeting);
-    }
-    saveMeetings();
-    initMeetings();
-};
-
-window.viewMeetings = function() {
-    console.log("Current:", currentMeetingData);
-    console.log("Past:", pastMeetingsData);
-    console.log("Queue:", upcomingQueueData);
-};
-
-document.addEventListener('DOMContentLoaded', initMeetings);
+const TMC_SUPABASE_URL = 'https://gwkcpbncazaeuiqdxqyn.supabase.co';
+const TMC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3a2NwYm5jYXphZXVpcWR4cXluIiwidHlwZSI6ImFub24iLCJpYXQiOjE3ODc2ODgyMzAsImV4cCI6MjEwMzI2NDIzMH0.bA0AwTwXn9TAK3szVxwiC9QQyRde3Dyt0DrSXABFQ1w';
+const tmcSupabase = supabase.createClient(TMC_SUPABASE_URL, TMC_SUPABASE_ANON_KEY);
+let currentMeetingData = null;
+let pastMeetingsData = [];
+let upcomingQueueData = [];
+function formatDate(dateString){const date=new Date(`${dateString}T00:00:00`);return date.toLocaleDateString('en-ZA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+function formatTime(timeString){const [h,m]=String(timeString||'00:00').split(':');let hour=parseInt(h,10);const ampm=hour>=12?'PM':'AM';hour=hour%12||12;return `${hour}:${m||'00'} ${ampm}`;}
+function calculateEndTime(startTime,duration){const [hours,minutes]=String(startTime||'00:00').split(':');const d=new Date();d.setHours(parseInt(hours,10)||0,parseInt(minutes,10)||0,0,0);const e=new Date(d.getTime()+(Number(duration)||1)*3600000);return `${String(e.getHours()).padStart(2,'0')}:${String(e.getMinutes()).padStart(2,'0')}`;}
+function setText(id,value){const el=document.getElementById(id);if(el)el.textContent=value??'';}
+function meetingStart(m){return new Date(`${m.meeting_date}T${String(m.meeting_time||'00:00').slice(0,5)}:00+02:00`);}
+function updateMeetingDisplay(){if(!currentMeetingData)return;setText('meetingTitle',currentMeetingData.title);setText('meetingDateText',formatDate(currentMeetingData.meeting_date));setText('meetingTimeText',`${formatTime(currentMeetingData.meeting_time)} - ${formatTime(calculateEndTime(currentMeetingData.meeting_time,currentMeetingData.duration))}`);setText('meetingDurationText',`${currentMeetingData.duration} hours`);setText('meetingVenueText',currentMeetingData.venue||'Not specified');setText('meetingChairText',currentMeetingData.chair||'Not specified');const a=document.getElementById('meetingAgenda');if(a){a.innerHTML='';(Array.isArray(currentMeetingData.agenda)?currentMeetingData.agenda:[]).forEach(x=>{const li=document.createElement('li');li.textContent=x;a.appendChild(li);});}const at=document.getElementById('meetingAttendees');if(at){at.innerHTML='';(Array.isArray(currentMeetingData.attendees)?currentMeetingData.attendees:[]).forEach(x=>{const b=document.createElement('span');b.className='attendee-badge';b.textContent=x;at.appendChild(b);});}}
+function startCountdown(){if(!currentMeetingData)return;const meetingDate=meetingStart(currentMeetingData);const meetingEnd=new Date(meetingDate.getTime()+(Number(currentMeetingData.duration)||1)*3600000);function update(){const now=new Date();let diff,statusText,timeText;const join=document.getElementById('joinMeetingBtn');if(now<meetingDate){diff=meetingDate-now;statusText='Upcoming';timeText='Time until meeting:';if(join)join.disabled=true;const progress=Math.min(100,Math.max(0,100-(diff/86400000)*100));const cp=document.getElementById('countdownProgress');if(cp)cp.style.width=`${progress}%`;setText('countdownStatusText',`${Math.round(progress)}% of countdown complete`);const dp=document.getElementById('durationProgress');if(dp)dp.style.width='0%';setText('durationText','0% completed');}else if(now<=meetingEnd){diff=meetingEnd-now;statusText='Ongoing';timeText='Meeting ends in:';if(join)join.disabled=false;const total=meetingEnd-meetingDate;const progress=Math.min(100,((total-diff)/total)*100);const dp=document.getElementById('durationProgress');if(dp)dp.style.width=`${progress}%`;setText('durationText',`${Math.round(progress)}% completed`);const cp=document.getElementById('countdownProgress');if(cp)cp.style.width='100%';setText('countdownStatusText','Countdown complete - Meeting in progress');}else{diff=0;statusText='Completed';timeText='Meeting finished';if(join)join.disabled=true;const cp=document.getElementById('countdownProgress');if(cp)cp.style.width='100%';const dp=document.getElementById('durationProgress');if(dp)dp.style.width='100%';setText('countdownStatusText','Countdown complete');setText('durationText','100% completed');}const badge=document.getElementById('currentMeetingStatus');if(badge){badge.textContent=statusText.toUpperCase();badge.className='meeting-status';badge.classList.add(statusText==='Upcoming'?'status-upcoming':statusText==='Ongoing'?'status-ongoing':'status-completed');}setText('meetingStatusText',statusText);setText('timeUntilText',timeText);if(diff>0){setText('days',String(Math.floor(diff/86400000)).padStart(2,'0'));setText('hours',String(Math.floor((diff%86400000)/3600000)).padStart(2,'0'));setText('minutes',String(Math.floor((diff%3600000)/60000)).padStart(2,'0'));setText('seconds',String(Math.floor((diff%60000)/1000)).padStart(2,'0'));}else['days','hours','minutes','seconds'].forEach(id=>setText(id,'00'));}update();if(window.tmcMeetingCountdown)clearInterval(window.tmcMeetingCountdown);window.tmcMeetingCountdown=setInterval(update,1000);}
+function updateHistoryDisplay(){const c=document.getElementById('meetingsHistory');if(!c)return;const card=c.closest('.meeting-history');c.innerHTML='';if(!pastMeetingsData.length){if(card)card.style.display='none';return;}if(card)card.style.display='block';pastMeetingsData.forEach(m=>{const item=document.createElement('div');item.className='meeting-history-item';item.innerHTML=`<div class="d-flex justify-content-between align-items-center"><div><h6 class="mb-1">${m.title}</h6><small class="text-muted">${formatDate(m.meeting_date)} | ${formatTime(m.meeting_time)} - ${formatTime(calculateEndTime(m.meeting_time,m.duration))}</small><p class="mb-0 mt-2">Completed: ${m.title}</p></div><span class="badge bg-secondary">COMPLETED</span></div>`;c.appendChild(item);});}
+async function loadMeetingsFromSupabase(){const {data,error}=await tmcSupabase.from('tmc_meetings').select('*').order('meeting_date',{ascending:true}).order('meeting_time',{ascending:true});if(error)throw error;const meetings=data||[];const now=new Date();const active=meetings.filter(m=>m.status==='ongoing');const future=meetings.filter(m=>m.status==='upcoming'&&meetingStart(m)>now).sort((a,b)=>meetingStart(a)-meetingStart(b));const completed=meetings.filter(m=>m.status==='completed'||m.status==='cancelled').sort((a,b)=>meetingStart(b)-meetingStart(a));currentMeetingData=active[0]||future[0]||null;upcomingQueueData=future.filter(m=>!currentMeetingData||m.id!==currentMeetingData.id);pastMeetingsData=completed;const no=document.getElementById('noMeetingScheduled');const scheduled=document.getElementById('meetingScheduled');if(!currentMeetingData){if(no)no.style.display='block';if(scheduled)scheduled.style.display='none';if(window.tmcMeetingCountdown)clearInterval(window.tmcMeetingCountdown);}else{if(no)no.style.display='none';if(scheduled)scheduled.style.display='block';updateMeetingDisplay();startCountdown();}updateHistoryDisplay();}
+window.scheduleMeeting=function(){console.warn('Meetings are managed from the TMC admin dashboard.');};window.viewMeetings=function(){};
+document.addEventListener('DOMContentLoaded',async function(){try{await loadMeetingsFromSupabase();}catch(error){console.error('Unable to load meetings:',error);const no=document.getElementById('noMeetingScheduled');const scheduled=document.getElementById('meetingScheduled');if(no)no.style.display='block';if(scheduled)scheduled.style.display='none';}});
 </script>
 
 <script>
-const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwgCBTCpsFP-8EnTzNmO3EBwDHqmnHo9LTm4z7fNlAPTmCDvKARQlCplYesS2rjhPWn/exec';
-
-document.addEventListener('DOMContentLoaded', function() {
-    const appointmentDateInput = document.getElementById('appointmentDate');
-    const today = new Date();
-    const minDate = new Date(today);
-    minDate.setDate(today.getDate() + 2);
-    
-    const minDateString = minDate.toISOString().split('T')[0];
-    appointmentDateInput.min = minDateString;
-    
-    const maxDate = new Date(today);
-    maxDate.setDate(today.getDate() + 60);
-    const maxDateString = maxDate.toISOString().split('T')[0];
-    appointmentDateInput.max = maxDateString;
-    
-    appointmentDateInput.addEventListener('change', validateAppointmentDate);
-    document.getElementById('resetFormBtn').addEventListener('click', resetForm);
-    document.getElementById('appointmentForm').addEventListener('submit', submitAppointmentForm);
-});
-
-function validateAppointmentDate() {
-    const appointmentDateInput = document.getElementById('appointmentDate');
-    const dateWarning = document.getElementById('dateWarning');
-    const warningMessage = document.getElementById('warningMessage');
-    const selectedDate = new Date(appointmentDateInput.value);
-    const today = new Date();
-    const minDate = new Date(today);
-    minDate.setDate(today.getDate() + 2);
-    
-    if (selectedDate < minDate) {
-        warningMessage.textContent = 'Appointments must be scheduled at least 2 days in advance. Please select a later date.';
-        dateWarning.style.display = 'block';
-        appointmentDateInput.value = '';
-        return false;
-    }
-    
-    if (selectedDate.getDay() === 6 || selectedDate.getDay() === 0) {
-        warningMessage.textContent = 'Appointments are not available on weekends. Please select a weekday (Monday to Friday).';
-        dateWarning.style.display = 'block';
-        appointmentDateInput.value = '';
-        return false;
-    }
-    
-    dateWarning.style.display = 'none';
-    return true;
-}
-
-function resetForm() {
-    document.getElementById('appointmentForm').reset();
-    document.getElementById('appointmentSuccess').style.display = 'none';
-    document.getElementById('appointmentError').style.display = 'none';
-    document.getElementById('dateWarning').style.display = 'none';
-    
-    const appointmentDateInput = document.getElementById('appointmentDate');
-    const today = new Date();
-    const minDate = new Date(today);
-    minDate.setDate(today.getDate() + 2);
-    const minDateString = minDate.toISOString().split('T')[0];
-    appointmentDateInput.min = minDateString;
-}
-
-async function submitAppointmentForm(event) {
-    event.preventDefault();
-    
-    if (!validateAppointmentDate()) return;
-    
-    const form = document.getElementById('appointmentForm');
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
-    
-    const submitBtn = document.getElementById('submitAppointmentBtn');
-    const submitText = document.getElementById('submitText');
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    
-    submitBtn.disabled = true;
-    submitText.style.display = 'none';
-    loadingSpinner.style.display = 'inline';
-    
-    const params = new URLSearchParams();
-    params.append('name', document.getElementById('appointmentName').value);
-    params.append('email', document.getElementById('appointmentEmail').value);
-    params.append('phone', document.getElementById('appointmentPhone').value);
-    params.append('type', document.getElementById('appointmentType').value);
-    params.append('date', document.getElementById('appointmentDate').value);
-    params.append('time', document.getElementById('appointmentTime').value);
-    params.append('subject', document.getElementById('appointmentSubject').value);
-    params.append('reason', document.getElementById('appointmentReason').value);
-    params.append('details', document.getElementById('appointmentDetails').value);
-    params.append('timestamp', new Date().toISOString());
-    
-    const url = `${GOOGLE_SHEETS_WEBAPP_URL}?${params.toString()}`;
-    
-    console.log('Submitting to:', url);
-    
-    try {
-        const response = await fetch(url);
-        const result = await response.json();
-        
-        console.log('Response:', result);
-        
-        if (result.success) {
-            showSuccessMessage();
-        } else {
-            showErrorMessage(result.message || 'Submission failed');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        showErrorMessage('Failed to submit. Please try again or contact us.');
-    } finally {
-        submitBtn.disabled = false;
-        submitText.style.display = 'inline';
-        loadingSpinner.style.display = 'none';
-    }
-}
-
-function showSuccessMessage() {
-    document.getElementById('appointmentSuccess').style.display = 'block';
-    document.getElementById('appointmentError').style.display = 'none';
-    document.getElementById('appointmentForm').style.display = 'none';
-    document.getElementById('appointmentSuccess').scrollIntoView({ behavior: 'smooth' });
-}
-
-function showErrorMessage(message) {
-    const errorElement = document.getElementById('appointmentError');
-    const errorMessage = document.getElementById('errorMessage');
-    errorMessage.textContent = message;
-    errorElement.style.display = 'block';
-    errorElement.scrollIntoView({ behavior: 'smooth' });
-}
-
-function testConnection() {
-    const testUrl = `${GOOGLE_SHEETS_WEBAPP_URL}?test=1`;
-    fetch(testUrl)
-        .then(r => r.json())
-        .then(data => {
-            console.log('Test result:', data);
-            alert('Connection successful! Server says: ' + data.message);
-        })
-        .catch(err => {
-            console.error('Test failed:', err);
-            alert('Connection failed: ' + err.message);
-        });
-}
+const appointmentSupabase = tmcSupabase;
+document.addEventListener('DOMContentLoaded',function(){const input=document.getElementById('appointmentDate');const today=new Date();const min=new Date(today);min.setDate(today.getDate()+2);input.min=min.toISOString().split('T')[0];const max=new Date(today);max.setDate(today.getDate()+60);input.max=max.toISOString().split('T')[0];input.addEventListener('change',validateAppointmentDate);document.getElementById('resetFormBtn').addEventListener('click',resetForm);document.getElementById('appointmentForm').addEventListener('submit',submitAppointmentForm);});
+function validateAppointmentDate(){const input=document.getElementById('appointmentDate'),warning=document.getElementById('dateWarning'),message=document.getElementById('warningMessage');const selected=new Date(`${input.value}T00:00:00`);const today=new Date();const min=new Date(today);min.setHours(0,0,0,0);min.setDate(today.getDate()+2);if(selected<min){message.textContent='Appointments must be scheduled at least 2 days in advance. Please select a later date.';warning.style.display='block';input.value='';return false;}if(selected.getDay()===6||selected.getDay()===0){message.textContent='Appointments are not available on weekends. Please select a weekday (Monday to Friday).';warning.style.display='block';input.value='';return false;}warning.style.display='none';return true;}
+function resetForm(){document.getElementById('appointmentForm').reset();document.getElementById('appointmentSuccess').style.display='none';document.getElementById('appointmentError').style.display='none';document.getElementById('dateWarning').style.display='none';const input=document.getElementById('appointmentDate');const min=new Date();min.setDate(min.getDate()+2);input.min=min.toISOString().split('T')[0];}
+async function submitAppointmentForm(event){event.preventDefault();if(!validateAppointmentDate())return;const form=document.getElementById('appointmentForm');if(!form.checkValidity()){form.reportValidity();return;}const submitBtn=document.getElementById('submitAppointmentBtn'),submitText=document.getElementById('submitText'),loading=document.getElementById('loadingSpinner');submitBtn.disabled=true;submitText.style.display='none';loading.style.display='inline';const payload={name:document.getElementById('appointmentName').value.trim(),email:document.getElementById('appointmentEmail').value.trim(),phone:document.getElementById('appointmentPhone').value.trim(),appointment_type:document.getElementById('appointmentType').value,appointment_date:document.getElementById('appointmentDate').value,appointment_time:document.getElementById('appointmentTime').value,subject:document.getElementById('appointmentSubject').value.trim(),reason:document.getElementById('appointmentReason').value.trim(),details:document.getElementById('appointmentDetails').value.trim(),status:'pending'};try{const {error}=await appointmentSupabase.from('tmc_appointments').insert(payload);if(error)throw error;showSuccessMessage();}catch(error){console.error('Appointment submission failed:',error);showErrorMessage('Failed to submit. Please try again or contact Tiangmaatla Centre.');}finally{submitBtn.disabled=false;submitText.style.display='inline';loading.style.display='none';}}
+function showSuccessMessage(){document.getElementById('appointmentSuccess').style.display='block';document.getElementById('appointmentError').style.display='none';document.getElementById('appointmentForm').style.display='none';document.getElementById('appointmentSuccess').scrollIntoView({behavior:'smooth'});}
+function showErrorMessage(message){const el=document.getElementById('appointmentError');document.getElementById('errorMessage').textContent=message;el.style.display='block';el.scrollIntoView({behavior:'smooth'});}
 </script>
 
 
