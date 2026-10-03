@@ -471,7 +471,7 @@
         let jobs = [];
 
         const TMC_SUPABASE_URL = 'https://gwkcpbncazaeuiqdxqyn.supabase.co';
-const TMC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3a2NwYm5jYXphZXVpcWR4cXluIiwidHlwZSI6ImFub24iLCJpYXQiOjE3ODc2ODgyMzAsImV4cCI6MjEwMzI2NDIzMH0.bA0AwTwXn9TAK3szVxwiC9QQyRde3Dyt0DrSXABFQ1w';
+const TMC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3a2NwYm5jYXphZXVpcWR4cXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2ODgyMzAsImV4cCI6MjEwMzI2NDIzMH0.bA0AwTwXn9TAK3szVxwiC9QQyRde3Dyt0DrSXABFQ1w';
 const tmcSupabase = supabase.createClient(TMC_SUPABASE_URL, TMC_SUPABASE_ANON_KEY);
 
         async function loadJobsFromSupabase() {
@@ -606,7 +606,7 @@ const tmcSupabase = supabase.createClient(TMC_SUPABASE_URL, TMC_SUPABASE_ANON_KE
                 jobCard.className = 'job-card card mb-4';
                 
                 const pdfButton = job.pdfAvailable 
-                    ? `<a href="${job.pdfPath || '#'}" class="pdf-download-btn" ${job.pdfPath ? 'target="_blank"' : `onclick="handlePDFDownload(${job.id})"`}>
+                    ? `<a href="${job.pdfPath || '#'}" class="pdf-download-btn" ${job.pdfPath ? 'target="_blank"' : `onclick="handlePDFDownload('${job.id}')"`}>
                           <i class="fas fa-file-pdf"></i> Download
                        </a>`
                     : `<span class="pdf-unavailable">
@@ -623,7 +623,7 @@ const tmcSupabase = supabase.createClient(TMC_SUPABASE_URL, TMC_SUPABASE_ANON_KE
                                 <h4 class="card-title mt-2">${job.title}</h4>
                             </div>
                             ${job.status === 'open' ? 
-                                `<button class="btn btn-sa" onclick="applyForJob(${job.id})">Apply Now</button>` : 
+                                `<button class="btn btn-sa" onclick="applyForJob('${job.id}')">Apply Now</button>` : 
                                 `<button class="btn btn-secondary" disabled>Closed</button>`
                             }
                         </div>
@@ -693,7 +693,7 @@ const tmcSupabase = supabase.createClient(TMC_SUPABASE_URL, TMC_SUPABASE_ANON_KE
             }
             
             const jobId = document.getElementById('applicantPosition').value;
-            const job = jobs.find(j => j.id === parseInt(jobId));
+            const job = jobs.find(j => j.id === jobId);
             
             const name = document.getElementById('applicantName').value;
             const email = document.getElementById('applicantEmail').value;

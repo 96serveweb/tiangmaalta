@@ -3,6 +3,7 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const $ = id => document.getElementById(id);
+const $$ = selector => document.querySelectorAll(selector);
 const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
 const modal = id => bootstrap.Modal.getOrCreateInstance($(id));
 const lines = value => String(value || "").split(/\r?\n/).map(x => x.trim()).filter(Boolean);
@@ -10,39 +11,96 @@ const today = () => new Date().toISOString().slice(0,10);
 let news=[], jobs=[], meetings=[], appointments=[];
 
 function message(text,type="success"){$("message").innerHTML=`<div class="alert alert-${type}">${esc(text)}</div>`;setTimeout(()=>$("message").innerHTML="",3500)}
-function adminCheck(){return supabaseClient.rpc("is_tmc_admin")}
+function adminCheck(){return supabaseClient.rpc("is_tmc_reception")}
 
-async function requireAdmin(){
+function showLogin(errorText=""){
+  $("loginScreen").style.display="flex";
+  $("dashboardShell").classList.remove("ready");
+  $("loginError").textContent=errorText;
+  $("loginError").classList.toggle("show",!!errorText);
+}
+
+function showDashboard(){
+  $("loginScreen").style.display="none";
+  $("dashboardShell").classList.add("ready");
+}
+
+async function checkReceptionSession(){
   const {data:{session},error}=await supabaseClient.auth.getSession();
   if(error) throw error;
-  if(!session?.user){window.location.href="tmc-admin.html";return false;}
-  const {data,isAdmin,error:checkError}=await adminCheck();
+  if(!session?.user){showLogin();return false;}
+  const {data,error:checkError}=await adminCheck();
   if(checkError) throw checkError;
-  if(data!==true){await supabaseClient.auth.signOut();alert("Administrator access required.");window.location.href="tmc-admin.html";return false;}
-  $("adminEmail").textContent=session.user.email||"Administrator";
+  if(data!==true){
+    await supabaseClient.auth.signOut();
+    showLogin("This account does not have Reception access.");
+    return false;
+  }
+  $("adminEmail").textContent=session.user.email||"Reception";
+  showDashboard();
   return true;
 }
 
-async function loadAll(){await Promise.all([loadNews(),loadJobs(),loadMeetings(),loadAppointments()]);updateStats()}
-async function loadNews(){const {data,error}=await supabaseClient.from("tmc_news_posts").select("*").order("published_date",{ascending:false}).order("created_at",{ascending:false});if(error)throw error;news=data||[];renderNews()}
-async function loadJobs(){const {data,error}=await supabaseClient.from("tmc_jobs").select("*").order("created_at",{ascending:false});if(error)throw error;jobs=data||[];renderJobs()}
-async function loadMeetings(){const {data,error}=await supabaseClient.from("tmc_meetings").select("*").order("meeting_date",{ascending:false}).order("meeting_time",{ascending:false});if(error)throw error;meetings=data||[];renderMeetings()}
-async function loadAppointments(){const {data,error}=await supabaseClient.from("tmc_appointments").select("*").order("created_at",{ascending:false});if(error)throw error;appointments=data||[];renderAppointments()}
+async function signInReception(email,password){
+  $("loginBtn").disabled=true;
+  $("loginBtn").innerHTML='<i class="fa-solid fa-spinner fa-spin me-1"></i> Signing in...';
+  $("loginError").classList.remove("show");
+  try{
+    const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+    if(error) throw error;
+    const allowed=await checkReceptionSession();
+    if(allowed) await loadAll();
+  }catch(e){
+    showLogin(e.message||"Unable to sign in.");
+  }finally{
+    $("loginBtn").disabled=false;
+    $("loginBtn").innerHTML='<i class="fa-solid fa-right-to-bracket me-1"></i> Sign in';
+  }
+}
 
-function updateStats(){$("statNews").textContent=news.length;$('statJobs').textContent=jobs.length;$('statMeetings').textContent=meetings.length;$('statAppointments').textContent=appointments.length}
-function renderNews(){$("newsTable").innerHTML=news.length?news.map(n=>`<tr><td><strong>${esc(n.title)}</strong></td><td>${esc(n.category)}</td><td>${esc(n.published_date)}</td><td><span class="badge ${n.published?'badge-open':'badge-closed'}">${n.published?'Published':'Hidden'}</span></td><td>${esc(n.image_filename||'—')}</td><td class="actions"><button class="btn btn-sm btn-outline-primary me-1" onclick="editNews('${n.id}')">Edit</button><button class="btn btn-sm btn-outline-danger" onclick="deleteNews('${n.id}')">Delete</button></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No news posts yet.</td></tr>`}
+$("loginForm").onsubmit=e=>{
+  e.preventDefault();
+  signInReception($("loginEmail").value.trim(),$("loginPassword").value);
+};
+
+async function loadJobs(){
+  const {data,error}=await supabaseClient.from("tmc_jobs").select("*").order("created_at",{ascending:false});
+  if(error)throw error;
+  jobs=data||[];
+  renderJobs();
+}
+
+async function loadMeetings(){
+  const {data,error}=await supabaseClient.from("tmc_meetings").select("*").order("meeting_date",{ascending:false}).order("meeting_time",{ascending:false});
+  if(error)throw error;
+  meetings=data||[];
+  renderMeetings();
+}
+
+async function loadAppointments(){
+  const {data,error}=await supabaseClient.from("tmc_appointments").select("*").order("appointment_date",{ascending:false}).order("appointment_time",{ascending:false});
+  if(error)throw error;
+  appointments=data||[];
+  renderAppointments();
+}
+
+function clearJob(){
+  ["jobId","jobTitle","jobDepartment","jobLocation","jobClosingDate","jobDescription","jobRequirements","jobAdvantages","jobEmploymentType","jobPdfPath","jobPdfName"].forEach(id=>$(id).value="");
+  $("jobStatus").value="open";
+  $("jobPdfAvailable").checked=false;
+}
+
+function clearMeeting(){
+  ["meetingId","meetingTitle","meetingDate","meetingTime","meetingVenue","meetingChair","meetingLink","meetingAgenda","meetingAttendees"].forEach(id=>$(id).value="");
+  $("meetingDuration").value=1;
+  $("meetingStatus").value="upcoming";
+}
+
+async function loadAll(){await Promise.all([loadJobs(),loadMeetings(),loadAppointments()]);updateStats()}
+function updateStats(){$("statJobs").textContent=jobs.length;$("statMeetings").textContent=meetings.length;$("statAppointments").textContent=appointments.length}
 function renderJobs(){$("jobsTable").innerHTML=jobs.length?jobs.map(j=>`<tr><td><strong>${esc(j.title)}</strong></td><td>${esc(j.department||'—')}</td><td>${esc(j.location||'—')}</td><td><span class="badge ${j.status==='open'?'badge-open':'badge-closed'}">${esc(j.status)}</span></td><td>${esc(j.closing_date||'—')}</td><td class="actions"><button class="btn btn-sm btn-outline-primary me-1" onclick="editJob('${j.id}')">Edit</button><button class="btn btn-sm btn-outline-danger" onclick="deleteJob('${j.id}')">Delete</button></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No jobs yet.</td></tr>`}
 function renderMeetings(){$("meetingsTable").innerHTML=meetings.length?meetings.map(m=>`<tr><td><strong>${esc(m.title)}</strong></td><td>${esc(m.meeting_date)}</td><td>${esc(String(m.meeting_time||'').slice(0,5))}</td><td>${esc(m.venue||'—')}</td><td><span class="badge">${esc(m.status)}</span></td><td class="actions"><button class="btn btn-sm btn-outline-primary me-1" onclick="editMeeting('${m.id}')">Edit</button><button class="btn btn-sm btn-outline-danger" onclick="deleteMeeting('${m.id}')">Delete</button></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No meetings yet.</td></tr>`}
 function renderAppointments(){$("appointmentsTable").innerHTML=appointments.length?appointments.map(a=>`<tr><td><strong>${esc(a.name)}</strong><br><small>${esc(a.email)}</small></td><td>${esc(a.appointment_type)}</td><td>${esc(a.appointment_date)}</td><td>${esc(String(a.appointment_time||'').slice(0,5))}</td><td><span class="badge badge-pending">${esc(a.status)}</span></td><td class="actions"><button class="btn btn-sm btn-outline-primary" onclick="editAppointment('${a.id}')">View / Edit</button></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No appointments yet.</td></tr>`}
-
-function clearNews(){['newsId','newsTitle','newsExcerpt','newsContent','newsImage','newsBadge','newsBadgeText'].forEach(id=>$(id).value='');$('newsCategory').value='Announcements';$('newsDate').value=today();$('newsPublished').checked=true}
-function clearJob(){['jobId','jobTitle','jobDepartment','jobLocation','jobClosingDate','jobDescription','jobRequirements','jobAdvantages','jobEmploymentType','jobPdfPath','jobPdfName'].forEach(id=>$(id).value='');$('jobStatus').value='open';$('jobPdfAvailable').checked=false}
-function clearMeeting(){['meetingId','meetingTitle','meetingVenue','meetingChair','meetingLink','meetingAgenda','meetingAttendees'].forEach(id=>$(id).value='');$('meetingDate').value=today();$('meetingTime').value='09:00';$('meetingDuration').value='1';$('meetingStatus').value='upcoming'}
-
-$("addNewsBtn").onclick=()=>{clearNews();$('newsModalTitle').textContent='Add news post';modal('newsModal').show()};
-window.editNews=id=>{const n=news.find(x=>x.id===id);if(!n)return;clearNews();$('newsModalTitle').textContent='Edit news post';$('newsId').value=n.id;$('newsTitle').value=n.title;$('newsExcerpt').value=n.excerpt||'';$('newsContent').value=n.content;$('newsImage').value=n.image_filename||'';$('newsCategory').value=n.category||'Announcements';$('newsBadge').value=n.badge||'';$('newsBadgeText').value=n.badge_text||'';$('newsDate').value=n.published_date||today();$('newsPublished').checked=!!n.published;modal('newsModal').show()};
-$("newsForm").onsubmit=async e=>{e.preventDefault();const id=$('newsId').value;const payload={title:$('newsTitle').value.trim(),excerpt:$('newsExcerpt').value.trim(),content:$('newsContent').value.trim(),image_filename:$('newsImage').value.trim(),category:$('newsCategory').value.trim()||'Announcements',badge:$('newsBadge').value.trim(),badge_text:$('newsBadgeText').value.trim(),published_date:$('newsDate').value||today(),published:$('newsPublished').checked};try{const q=id?supabaseClient.from('tmc_news_posts').update(payload).eq('id',id):supabaseClient.from('tmc_news_posts').insert(payload);const {error}=await q;if(error)throw error;modal('newsModal').hide();await loadNews();updateStats();message('News post saved.')}catch(e){message(e.message,'danger')}};
-window.deleteNews=async id=>{if(!confirm('Delete this news post from the database?'))return;try{const {error}=await supabaseClient.from('tmc_news_posts').delete().eq('id',id);if(error)throw error;await loadNews();updateStats();message('News post deleted.')}catch(e){message(e.message,'danger')}};
 
 $("addJobBtn").onclick=()=>{clearJob();$('jobModalTitle').textContent='Add job';modal('jobModal').show()};
 window.editJob=id=>{const j=jobs.find(x=>x.id===id);if(!j)return;clearJob();$('jobModalTitle').textContent='Edit job';$('jobId').value=j.id;$('jobTitle').value=j.title;$('jobDepartment').value=j.department||'';$('jobLocation').value=j.location||'';$('jobStatus').value=j.status;$('jobClosingDate').value=j.closing_date||'';$('jobDescription').value=j.description||'';$('jobRequirements').value=Array.isArray(j.requirements)?j.requirements.join('\n'):'';$('jobAdvantages').value=Array.isArray(j.added_advantage)?j.added_advantage.join('\n'):'';$('jobEmploymentType').value=j.employment_type||'';$('jobPdfAvailable').checked=!!j.pdf_available;$('jobPdfPath').value=j.pdf_path||'';$('jobPdfName').value=j.pdf_name||'';modal('jobModal').show()};
@@ -61,6 +119,6 @@ $("refreshAppointmentsBtn").onclick=async()=>{try{await loadAppointments();updat
 
 $$('.nav-btn[data-section]').forEach(btn=>btn.onclick=()=>{ $$('.section').forEach(s=>s.classList.remove('active'));$(btn.dataset.section).classList.add('active');$$('.nav-btn[data-section]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');$('sidebar').classList.remove('open') });
 $("mobileMenuBtn").onclick=()=>$("sidebar").classList.toggle('open');
-$("logoutBtn").onclick=async()=>{await supabaseClient.auth.signOut();window.location.href='tmc-admin.html'};
+$("logoutBtn").onclick=async()=>{await supabaseClient.auth.signOut();showLogin();$("loginPassword").value="";};
 
-(async()=>{try{const ok=await requireAdmin();if(ok)await loadAll()}catch(e){console.error(e);alert(e.message||'Unable to load the admin dashboard.')}})();
+(async()=>{try{const ok=await checkReceptionSession();if(ok)await loadAll()}catch(e){console.error(e);showLogin(e.message||"Unable to load the Reception dashboard.")}})();

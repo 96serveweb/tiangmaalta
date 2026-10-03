@@ -784,9 +784,6 @@
     }
 }
 
-
-
-/* Temporary Event Ticker */
 .event-ticker {
     width: 100%;
     overflow: hidden;
@@ -869,7 +866,6 @@
         </div>
     </nav>
 
-    <!-- Temporary Event Notice -->
 <div class="event-ticker">
     <div class="event-ticker-track">
         <div class="event-ticker-content">
@@ -1858,7 +1854,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const TMC_SUPABASE_URL = 'https://gwkcpbncazaeuiqdxqyn.supabase.co';
-const TMC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3a2NwYm5jYXphZXVpcWR4cXluIiwidHlwZSI6ImFub24iLCJpYXQiOjE3ODc2ODgyMzAsImV4cCI6MjEwMzI2NDIzMH0.bA0AwTwXn9TAK3szVxwiC9QQyRde3Dyt0DrSXABFQ1w';
+const TMC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3a2NwYm5jYXphZXVpcWR4cXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2ODgyMzAsImV4cCI6MjEwMzI2NDIzMH0.bA0AwTwXn9TAK3szVxwiC9QQyRde3Dyt0DrSXABFQ1w';
 const tmcSupabase = supabase.createClient(TMC_SUPABASE_URL, TMC_SUPABASE_ANON_KEY);
 let currentMeetingData = null;
 let pastMeetingsData = [];
